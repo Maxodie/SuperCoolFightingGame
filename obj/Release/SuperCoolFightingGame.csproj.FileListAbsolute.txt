@@ -1,0 +1,7 @@
+C:\Users\maxod\Desktop\CNAM-ENJMIN_cours\UE44_base_C#\SuperCoolFightingGame\SuperCoolFightingGame\bin\Release\SuperCoolFightingGame.exe.config
+C:\Users\maxod\Desktop\CNAM-ENJMIN_cours\UE44_base_C#\SuperCoolFightingGame\SuperCoolFightingGame\bin\Release\SuperCoolFightingGame.exe
+C:\Users\maxod\Desktop\CNAM-ENJMIN_cours\UE44_base_C#\SuperCoolFightingGame\SuperCoolFightingGame\bin\Release\SuperCoolFightingGame.pdb
+C:\Users\maxod\Desktop\CNAM-ENJMIN_cours\UE44_base_C#\SuperCoolFightingGame\SuperCoolFightingGame\obj\Release\SuperCoolFightingGame.csproj.AssemblyReference.cache
+C:\Users\maxod\Desktop\CNAM-ENJMIN_cours\UE44_base_C#\SuperCoolFightingGame\SuperCoolFightingGame\obj\Release\SuperCoolFightingGame.csproj.CoreCompileInputs.cache
+C:\Users\maxod\Desktop\CNAM-ENJMIN_cours\UE44_base_C#\SuperCoolFightingGame\SuperCoolFightingGame\obj\Release\SuperCoolFightingGame.exe
+C:\Users\maxod\Desktop\CNAM-ENJMIN_cours\UE44_base_C#\SuperCoolFightingGame\SuperCoolFightingGame\obj\Release\SuperCoolFightingGame.pdb

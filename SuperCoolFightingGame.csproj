@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{728CA99F-D1EE-4AF3-9BA2-C289BA026A14}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>SuperCoolFightingGame</RootNamespace>
+    <AssemblyName>SuperCoolFightingGame</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Characters\Assassin.cs" />
+    <Compile Include="Characters\Character.cs" />
+    <Compile Include="Characters\CharacterDatabase.cs" />
+    <Compile Include="Characters\CharacterStats.cs" />
+    <Compile Include="Characters\Fighter.cs" />
+    <Compile Include="Characters\Healer.cs" />
+    <Compile Include="Characters\Tank.cs" />
+    <Compile Include="Enums\enums.cs" />
+    <Compile Include="GameEngine\Animation.cs" />
+    <Compile Include="GameEngine\Animator.cs" />
+    <Compile Include="GameEngine\AudioListener.cs" />
+    <Compile Include="GameEngine\GameE.cs" />
+    <Compile Include="GameEngine\ImageLoader.cs" />
+    <Compile Include="GameEngine\WindowShaker.cs" />
+    <Compile Include="GameState\DifficultySelectorState.cs" />
+    <Compile Include="GameState\GameState.cs" />
+    <Compile Include="GameState\GameStateData.cs" />
+    <Compile Include="GameEngine\Gui.cs" />
+    <Compile Include="GameState\PlayerSelectorState.cs" />
+    <Compile Include="Main.cs" />
+    <Compile Include="GameState\MainGameState.cs" />
+    <Compile Include="GameState\MainMenuState.cs" />
+    <Compile Include="GameEngine\ResizibleImage.cs" />
+    <Compile Include="GameEngine\Sprite.cs" />
+    <Compile Include="GameEngine\SuperCoolFightingGame.cs" />
+    <Compile Include="GameEngine\Vector.cs" />
+    <Compile Include="GameEngine\WindowE.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Managers\CharacterSelector.cs" />
+    <Compile Include="Managers\GameManager.cs" />
+    <Compile Include="Managers\MainMenuManager.cs" />
+    <Compile Include="Managers\MusicManager.cs" />
+    <Compile Include="Managers\OperationSelector.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
