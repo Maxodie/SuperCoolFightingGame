@@ -6,7 +6,7 @@ namespace GameEn
 {
     public class SpriteAnimation {
         WindowE window;
-        bool isPaused = false;
+        public bool isPaused { get; private set; } = false;
         public Sprite sprite;
         Rectangle startRect;
         Rectangle endRect;

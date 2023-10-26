@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace GameEn {
@@ -14,7 +15,7 @@ namespace GameEn {
             if(currentAnimationItem != null) {
                 currentAnimationItem.Reset(true);
             }
-
+            Console.WriteLine("change");
             animatons[key].Item1.sprite.ChangeImage(animatons[key].Item2, animatons[key].Item3);
             animatons[key].Item1.Play();
             currentAnimationItem = animatons[key].Item1;

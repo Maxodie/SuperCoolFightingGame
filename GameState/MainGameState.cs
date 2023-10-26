@@ -45,13 +45,13 @@ namespace SuperCoolFightingGame
             hearthSeparator = new Sprite(imageLoader.GetImage("separator"), new Rectangle(0, 0, 32, 88), new Vector2(384, 40));
             gameE.AddSpriteToRender(hearthSeparator);
 
-            attackOperation = new ButtonGUI(new Vector2(352, 480), new Size(128, 128), "", gameE.fonts["Pixel40"], new Rectangle(0, 0, 128, 128), attackImageHighlightBtn, attackImageBtn, attackImagePressedBtn);
+            attackOperation = new ButtonGUI(new Vector2(352, 480), new Size(128, 128), "", gameE.fonts["Pixel40"], new Rectangle(0, 0, 128, 128), attackImageHighlightBtn, attackImageBtn, attackImagePressedBtn, true);
             attackOperation.onClick += delegate(object sender, EventArgs e) { StartOperations(sender, e, Operation.Attack); };
 
-            defenseOperation = new ButtonGUI(new Vector2(496, 480), new Size(128, 128), "", gameE.fonts["Pixel40"], new Rectangle(0, 0, 128, 128), defenseHighlightImageBtn, defenseImageBtn, defensePressedImageBtn);
+            defenseOperation = new ButtonGUI(new Vector2(496, 480), new Size(128, 128), "", gameE.fonts["Pixel40"], new Rectangle(0, 0, 128, 128), defenseHighlightImageBtn, defenseImageBtn, defensePressedImageBtn, true);
             defenseOperation.onClick += delegate (object sender, EventArgs e) { StartOperations(sender, e, Operation.Defend); };
 
-            specialOperation = new ButtonGUI(new Vector2(640, 480), new Size(128, 128), "", gameE.fonts["Pixel40"], new Rectangle(0, 0, 128, 128), specialImageHighlightBtn, specialImageBtn, specialImagePressedBtn);
+            specialOperation = new ButtonGUI(new Vector2(640, 480), new Size(128, 128), "", gameE.fonts["Pixel40"], new Rectangle(0, 0, 128, 128), specialImageHighlightBtn, specialImageBtn, specialImagePressedBtn, true);
             specialOperation.onClick += delegate (object sender, EventArgs e) { StartOperations(sender, e, Operation.Special); };
 
             //Image btnImage1 = imageLoader.GetImage("Scroll");

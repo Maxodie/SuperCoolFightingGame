@@ -47,9 +47,10 @@ namespace GameEn
 
         protected override void OnClosed(EventArgs e) {
             _evExit.Set();
-            _gameThread.Join();
+            _gameThread.Abort();
             _evExit.Close();
             base.OnClosed(e);
+
         }
 
         public void OnGameTimerTick() {
@@ -163,9 +164,9 @@ namespace GameEn
         /// Reset the render of all things
         /// </summary>
         public void ResetRender() {
+            Invalidate();
             sprites.Clear();
             texts.Clear();
-
             Controls.Clear();
 
             buttons.Clear();
@@ -180,11 +181,13 @@ namespace GameEn
         }
 
         private void GameThreadProc() {
+
+
             IAsyncResult tick = null;
             while (!_evExit.WaitOne(15)) {
                 if (tick != null) {
                     if (!tick.AsyncWaitHandle.WaitOne(0)) {
-                        // we are running too slow, maybe we can do something about it
+                       
                         if (WaitHandle.WaitAny(new WaitHandle[] { _evExit, tick.AsyncWaitHandle }) == 0) {
                             return;
                         }

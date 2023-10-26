@@ -53,5 +53,20 @@ namespace GameEn
 
             return images[key];
         }
+
+        /// <summary>
+        /// free the memory of an image and remove it from the dictionnary
+        /// </summary>
+        /// <param name="image"></param>
+        public void DisposeImage(Image image) {
+            image.Dispose();
+            foreach(var item in images) {
+                if (item.Value == image) {
+                    images.Remove(item.Key);
+                    return;
+                }
+
+            }
+        }
     }
 }

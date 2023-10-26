@@ -24,14 +24,14 @@ namespace SuperCoolFightingGame
             Image scrollStartOpen = gameData.imageLoader.GetImage("scrollPlayOpen");
 
             //Start Button
-            startButton = new ButtonGUI(new Vector2(184, 296), new Size(448, 96), "", gameData.fonts["Pixel40"], new Rectangle(0, 0, 448, 96), scrollStartOpen, scrollStartOpen, scrollStartOpen);
+            startButton = new ButtonGUI(new Vector2(184, 296), new Size(448, 96), "", gameData.fonts["Pixel40"], new Rectangle(0, 0, 448, 96), scrollStartOpen, scrollStartOpen, scrollStartOpen, false);
             startButton.onClick += StartGame;
 
-            startBtnAnim = new SpriteAnimation(gameData.window, startButton.btnSprite, new Rectangle(0, 0, 10752, 96), 24, 1f, .5f);
+            startBtnAnim = new SpriteAnimation(gameData.window, startButton.btnSprite, new Rectangle(0, 0, 10752, 96), 24, 1f, 1f);
             startBtnAnim.Play();
 
             //QuitButton00
-            quitButton = new ButtonGUI(new Vector2(184, 408), new Size(448, 96), "", gameData.fonts["Pixel40"], new Rectangle(0, 0, 448, 96), scrollExitOpen, scrollExitOpen, scrollExitOpen);
+            quitButton = new ButtonGUI(new Vector2(184, 408), new Size(448, 96), "", gameData.fonts["Pixel40"], new Rectangle(0, 0, 448, 96), scrollExitOpen, scrollExitOpen, scrollExitOpen, false);
             quitButton.onClick += QuitGame;
 
             closeBtnAnim = new SpriteAnimation(gameData.window, quitButton.btnSprite, new Rectangle(0, 0, 10752, 96), 24, 1f, 2f);
@@ -40,6 +40,8 @@ namespace SuperCoolFightingGame
 
         //Start button
         void StartGame(object sender, EventArgs e) {
+            if (!startBtnAnim.isPaused) return;
+
             Image scrollStartClose = gameData.imageLoader.GetImage("scrollPlayClose");
 
             startButton.ChangeImages(scrollStartClose, scrollStartClose, scrollStartClose);
@@ -62,6 +64,8 @@ namespace SuperCoolFightingGame
 
         //Quit button
         void QuitGame(object sender, EventArgs e) {
+            if (!closeBtnAnim.isPaused) return;
+
             Image scrollExitClose = gameData.imageLoader.GetImage("scrollExitClose");
 
             quitButton.ChangeImages(scrollExitClose, scrollExitClose, scrollExitClose);

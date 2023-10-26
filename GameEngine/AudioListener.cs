@@ -44,7 +44,6 @@ namespace GameEn
 
         public void ChangeSound(string musicLocation) {
             //Load a new sound
-            Console.WriteLine(musicLocation);
             mediaPlayer.Open(new System.Uri(musicLocation));
         }
         

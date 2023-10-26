@@ -119,22 +119,24 @@ namespace SuperCoolFightingGame
     
         public virtual int TakeDamage(Character attacker)
         {
-              // Return amount of damages
-              Random rand = new Random();
-              if (rand.Next(1, 100 / CurrentDodgeRate) == 1)
-                return 0;
+            // Return amount of damages
+            Random rand = new Random();
+            if (rand.Next(1, 100 / CurrentDodgeRate) == 1)
+            return 0;
 
-              int damage = attacker.CurrentAttack;
-              if (rand.Next(1, 100 / attacker.CurrentCritRate) == 1)
-                damage *= 2;
-              if (CurrentOperation == Operation.Defend)
-              {
-                if (damage > 0) damage--;
-                Console.WriteLine($"{Name} se défend pv !");
-              }
+            int damage = attacker.CurrentAttack;
+            if (rand.Next(1, 100 / attacker.CurrentCritRate) == 1)
+            damage *= 2;
+            if (CurrentOperation == Operation.Defend)
+            {
+            if (damage > 0) damage--;
+            Console.WriteLine($"{Name} se défend pv !");
+            } else {
+                animator.PlayAnimation("Damaged");
+            }
       
-              CurrentHealth -= damage;
-              return damage;
+            CurrentHealth -= damage;
+            return damage;
         }
 
         public bool IsAlive()
@@ -161,9 +163,8 @@ namespace SuperCoolFightingGame
               if (CurrentEnergy > MaxEnergy) CurrentEnergy = MaxEnergy;
         }
 
-        public virtual void NewRound()
-        {
-          AddEnergy(1);
+        public virtual void NewRound() {
+            AddEnergy(1);
         }
 
         public virtual int GetSpecialData() { return 0; }

@@ -51,16 +51,16 @@ namespace SuperCoolFightingGame
             Image fighterIcon = imageLoader.GetImage("fighterIcon");
             Image tankIcon = imageLoader.GetImage("tankIcon");
 
-            buttonAssassin = new ButtonGUI(new Vector2(48, 424), new Size(168, 168), "", gameE.fonts["Pixel40"], new Rectangle(0, 0, 168, 168), assassinFace, assassinFace, assassinFace);
+            buttonAssassin = new ButtonGUI(new Vector2(48, 424), new Size(168, 168), "", gameE.fonts["Pixel40"], new Rectangle(0, 0, 168, 168), assassinFace, assassinFace, assassinFace, false);
             buttonAssassin.onClick += delegate (object sender, EventArgs e) { SelectCharacter(sender, e, buttonAssassin, assassinIcon, new Vector2(72, 448), new Vector2(48, 424), typeof(Assassin)); };
 
-            buttonFighter = new ButtonGUI(new Vector2(224, 424), new Size(168, 168), "", gameE.fonts["Pixel40"], new Rectangle(0, 0, 168, 168), fighterFace, fighterFace, fighterFace);
+            buttonFighter = new ButtonGUI(new Vector2(224, 424), new Size(168, 168), "", gameE.fonts["Pixel40"], new Rectangle(0, 0, 168, 168), fighterFace, fighterFace, fighterFace, false);
             buttonFighter.onClick += delegate (object sender, EventArgs e) { SelectCharacter(sender, e, buttonFighter, fighterIcon, new Vector2(248, 448), new Vector2(224, 424), typeof(Fighter)); };
 
-            buttonHealer = new ButtonGUI(new Vector2(408, 424), new Size(168, 168), "", gameE.fonts["Pixel40"], new Rectangle(0, 0, 168, 168), enchanterFace, enchanterFace, enchanterFace);
+            buttonHealer = new ButtonGUI(new Vector2(408, 424), new Size(168, 168), "", gameE.fonts["Pixel40"], new Rectangle(0, 0, 168, 168), enchanterFace, enchanterFace, enchanterFace, false);
             buttonHealer.onClick += delegate (object sender, EventArgs e) { SelectCharacter(sender, e, buttonHealer, enchanterIcon, new Vector2(432, 448), new Vector2(408, 424), typeof(Healer)); };
 
-            buttonTank = new ButtonGUI(new Vector2(584, 424), new Size(168, 168), "", gameE.fonts["Pixel40"], new Rectangle(0, 0, 168, 168), tankFace, tankFace, tankFace);
+            buttonTank = new ButtonGUI(new Vector2(584, 424), new Size(168, 168), "", gameE.fonts["Pixel40"], new Rectangle(0, 0, 168, 168), tankFace, tankFace, tankFace, false);
             buttonTank.onClick += delegate (object sender, EventArgs e) { SelectCharacter(sender, e, buttonTank, tankIcon, new Vector2(608, 448), new Vector2(584, 424), typeof(Tank)); };
 
         }
@@ -105,6 +105,8 @@ namespace SuperCoolFightingGame
         }
 
         void ConfirmSelection(object sender, EventArgs e) {
+            if (!spriteStartButtonAnimation.isPaused) return;
+
             ConfirmCharacterSelection();
 
             Image scrollStartClose = imageLoader.GetImage("scrollPlayClose");
@@ -130,16 +132,16 @@ namespace SuperCoolFightingGame
             }
 
             if (currentCharacterBtn != null) {
-                currentCharacterBtn.ChangeImages(currentCharacterImage, currentCharacterImage, currentCharacterImage, new Rectangle(0, 0, 168, 168));
                 currentCharacterBtn.btnSprite.ChangePos(currentCharacterPos);
+                currentCharacterBtn.ChangeImages(currentCharacterImage, currentCharacterImage, currentCharacterImage, new Rectangle(0, 0, 168, 168));
             }
 
             currentCharacterBtn = currentIcon;
             currentCharacterImage = currentIcon.btnSprite.rImage.image;
             currentCharacterPos = pos;
-
-            currentIcon.ChangeImages(newImage, newImage, newImage, new Rectangle(0, 0, 120, 120));
             currentIcon.btnSprite.ChangePos(newImagePos);
+            currentIcon.ChangeImages(newImage, newImage, newImage, new Rectangle(0, 0, 120, 120));
+            
 
 
             if (startBtn == null) {
@@ -147,7 +149,7 @@ namespace SuperCoolFightingGame
                 Image scrollStartOpen = imageLoader.GetImage("scrollPlayOpen");
 
                 //Start Button
-                startBtn = new ButtonGUI(new Vector2(176, 56), new Size(448, 96), "", superCoolFightingGame.fonts["Pixel40"], new Rectangle(0, 0, 448, 96), scrollStartOpen, scrollStartOpen, scrollStartOpen);
+                startBtn = new ButtonGUI(new Vector2(176, 56), new Size(448, 96), "", superCoolFightingGame.fonts["Pixel40"], new Rectangle(0, 0, 448, 96), scrollStartOpen, scrollStartOpen, scrollStartOpen, false);
                 startBtn.onClick += ConfirmSelection;
 
                 spriteStartButtonAnimation = new SpriteAnimation(window, startBtn.btnSprite, new Rectangle(0, 0, 10752, 96), 24, 1f, 0.2f);
@@ -155,8 +157,8 @@ namespace SuperCoolFightingGame
             }
         }
 
-        public void ConfirmCharacterSelection()
-        {
+        public void ConfirmCharacterSelection() {
+
             characterSelector.Confirm(out player);
 
             characterSelector.Select();

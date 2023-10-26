@@ -25,7 +25,9 @@ namespace GUI
         Color pressedColor;
         Color highlightColor;
 
-        bool isImageBtn;
+        bool isImageBtn = false;
+        bool pressImgEffect = false;
+        bool isHoverImg = false;
         string text;
 
         public ButtonGUI(Vector2 pos, Size size, string text, Font font) {
@@ -51,11 +53,13 @@ namespace GUI
             InitEvent();
         }
 
-        public ButtonGUI(Vector2 pos, Size size, string text, Font font, Rectangle rect, Image highlightColor, Image normalImg, Image clickedImage)
-            : this(pos, size, text, font) {
-
+        public ButtonGUI(Vector2 pos, Size size, string text, Font font, Rectangle rect, Image highlightColor, Image normalImg, Image clickedImage, bool pressImgEffect)
+            : this(pos, size, text, font)
+        {
+            this.pressImgEffect = pressImgEffect;
             isImageBtn = true;
             InitVisualImage(rect, normalImg, clickedImage, highlightColor);
+            this.pressImgEffect = pressImgEffect;
         }
 
         public ButtonGUI(Vector2 pos, Size size, string text, Font font, Color normalColor, Color pressedColor, Color highlightColor)
@@ -69,12 +73,16 @@ namespace GUI
         }
 
         public void ChangeImages(Image normalImg, Image clickedImage, Image highlightImage, Rectangle newRectangle = new Rectangle()) {
+            isHoverImg = normalImg != highlightImage;
+
             btnImages[0] = normalImg;
             btnImages[1] = clickedImage;
             btnImages[2] = highlightImage;
 
             btnSprite.ChangeImage(btnSprite.rImage.image, new Rectangle(0, btnSprite.Rect.Y, btnSprite.Rect.Width, btnSprite.Rect.Height));
             btnSprite.ChangeImage(btnImages[currentImageListId], newRectangle);
+
+            btn.Refresh();
         }
 
         //Link mouse event
@@ -86,6 +94,8 @@ namespace GUI
 
         //add images in array and put colors to transparent
         void InitVisualImage(Rectangle rect, Image normalImg, Image clickedImage, Image highlightImage) {
+            isHoverImg = normalImg != highlightImage;
+
             btnImages = new Image[3];
 
             btnImages[0] = normalImg;
@@ -116,8 +126,10 @@ namespace GUI
         public async void PerformClick(object sender, EventArgs e) {
             //Change visual with onClick event
             if (isImageBtn) {
-                btnSprite.ChangeImage(btnImages[1]);
-                btn.Refresh();
+                if (!pressImgEffect) {
+                    btnSprite.ChangeImage(btnImages[1]);
+                    btn.Refresh();
+                }
                 
             }
             else {
@@ -126,9 +138,11 @@ namespace GUI
 
             onClick?.Invoke(sender, e);
 
+            if (!pressImgEffect) return;
+
             if(isImageBtn) {//delay for the press effect
                 await Task.Run(() => {
-                    Task.Delay(10).Wait();
+                    Task.Delay(20).Wait();
                 });
                 currentImageListId = 2;
                 btnSprite.ChangeImage(btnImages[2]);
@@ -152,7 +166,8 @@ namespace GUI
         private void OnMouseHover(object sender, EventArgs e) {
             //change visual with onMouseHover event
             if (isImageBtn) {
-                btnSprite.ChangeImage(btnImages[2]);
+                if (isHoverImg)
+                    btnSprite.ChangeImage(btnImages[2]);
             }
             else {
                 btn.BackColor = highlightColor;
@@ -166,7 +181,8 @@ namespace GUI
         {
             //change visual with onMouseLeaveEvent
             if (isImageBtn) {
-                btnSprite.ChangeImage(btnImages[0]);
+                if (isHoverImg)
+                    btnSprite.ChangeImage(btnImages[0]);
             }
             else {
                 btn.BackColor = normalColor;

@@ -1,4 +1,5 @@
 ﻿using GameEn;
+using System;
 using System.Collections.Generic;
 
 namespace SuperCoolFightingGame
@@ -11,8 +12,6 @@ namespace SuperCoolFightingGame
         protected SuperCoolFightingGame superCoolFightingGame;
 
         protected ImageLoader imageLoader;
-
-        List<SpriteAnimation> spriteAnimationList = new List<SpriteAnimation>();
 
         /// <summary>
         /// Load all game states infos
@@ -41,29 +40,10 @@ namespace SuperCoolFightingGame
         }
 
         /// <summary>
-        /// Add animation to update
-        /// </summary>
-        /// <param name="animation"></param>
-        public void AddAnimation(SpriteAnimation animation) {
-            spriteAnimationList.Add(animation);
-        }
-
-        /// <summary>
-        /// Remove animation from update
-        /// </summary>
-        /// <param name="animation"></param>
-        public void RemoveAnimation(SpriteAnimation animation) {
-            spriteAnimationList.Remove(animation);
-        }
-
-        /// <summary>
         /// Update fonction called each frame
         /// </summary>
         /// <param name="dt"></param>
         public virtual void Update(float dt) {
-            for(int i=0; i<spriteAnimationList.Count; i++) {
-                spriteAnimationList[i].Update(dt);
-            }
         }
 
         /// <summary>

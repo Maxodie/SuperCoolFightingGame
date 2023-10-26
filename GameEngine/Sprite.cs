@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 
 namespace GameEn
 {
@@ -57,21 +58,23 @@ namespace GameEn
         }
 
         public void ChangeImage(Image newImg, Rectangle newRect = new Rectangle()) {
+            
             if (newRect != new Rectangle())
                 rect = newRect;
 
-            if (newImg != rImage.image)
-            {
+            if (newImg != rImage.image) {
+    
                 rImage.image = new Bitmap(newImg, newImg.Size);
                 if(flipX) {
                     flipX = false;
                     FlipX();
                 }
-            } 
+            }
+
             WindowE.instance.Update();
         }
 
-        public void ChangePos(Vector2 newPos) {
+            public void ChangePos(Vector2 newPos) {
             pos = newPos;
         }
     }

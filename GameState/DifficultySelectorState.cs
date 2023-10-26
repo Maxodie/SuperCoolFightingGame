@@ -37,13 +37,13 @@ namespace SuperCoolFightingGame
             Image hard = imageLoader.GetImage("hardDifficulty");
 
             //Diffictulty button 
-            easyDifficulty = new ButtonGUI(new Vector2(120, 424), new Size(168, 168), "", gameE.fonts["Pixel40"], new Rectangle(0, 0, 168, 168), easy, easy, easy);
+            easyDifficulty = new ButtonGUI(new Vector2(120, 424), new Size(168, 168), "", gameE.fonts["Pixel40"], new Rectangle(0, 0, 168, 168), easy, easy, easy, false);
             easyDifficulty.onClick += delegate (object sender, EventArgs e) { SelectDifficulty(sender, e, new Vector2(120, 424), Difficulty.Easy); };
 
-            mediumDifficulty = new ButtonGUI(new Vector2(312, 424), new Size(168, 168), "", gameE.fonts["Pixel40"], new Rectangle(0, 0, 168, 168), medium, medium, medium);
+            mediumDifficulty = new ButtonGUI(new Vector2(312, 424), new Size(168, 168), "", gameE.fonts["Pixel40"], new Rectangle(0, 0, 168, 168), medium, medium, medium, false);
             mediumDifficulty.onClick += delegate (object sender, EventArgs e) { SelectDifficulty(sender, e, new Vector2(312, 424), Difficulty.Medium); };
 
-            hardDifficulty = new ButtonGUI(new Vector2(512, 424), new Size(168, 168), "", gameE.fonts["Pixel40"], new Rectangle(0, 0, 168, 168), hard, hard, hard);
+            hardDifficulty = new ButtonGUI(new Vector2(512, 424), new Size(168, 168), "", gameE.fonts["Pixel40"], new Rectangle(0, 0, 168, 168), hard, hard, hard, false);
             hardDifficulty.onClick += delegate (object sender, EventArgs e) { SelectDifficulty(sender, e, new Vector2(512, 424), Difficulty.Hard); };
 
             difficultyText = new Text(Color.White, new Vector2(120, 380), "Select a difficulty", superCoolFightingGame.fonts["Pixel16"]);
@@ -121,7 +121,7 @@ namespace SuperCoolFightingGame
                 Image scrollStartOpen = imageLoader.GetImage("scrollPlayOpen");
 
                 //Start Button
-                startBtn = new ButtonGUI(new Vector2(176, 56), new Size(448, 96), "", superCoolFightingGame.fonts["Pixel40"], new Rectangle(0, 0, 448, 96), scrollStartOpen, scrollStartOpen, scrollStartOpen);
+                startBtn = new ButtonGUI(new Vector2(176, 56), new Size(448, 96), "", superCoolFightingGame.fonts["Pixel40"], new Rectangle(0, 0, 448, 96), scrollStartOpen, scrollStartOpen, scrollStartOpen, false);
                 startBtn.onClick += StartCaracterSelectorBtn;
 
                 spriteStartButtonAnimation = new SpriteAnimation(window, startBtn.btnSprite, new Rectangle(0, 0, 10752, 96), 24, 1f, 0.2f);
@@ -130,6 +130,8 @@ namespace SuperCoolFightingGame
         }
 
         void StartCaracterSelectorBtn(object sender, EventArgs e) {
+            if (!spriteStartButtonAnimation.isPaused) return;
+
             Image scrollStartClose = imageLoader.GetImage("scrollPlayClose");
 
             startBtn.ChangeImages(scrollStartClose, scrollStartClose, scrollStartClose);
