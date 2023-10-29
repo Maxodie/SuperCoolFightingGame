@@ -1,18 +1,24 @@
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SuperCoolFightingGame
 {
     public class GameManager
     {
-
+        SuperCoolFightingGame mainState;
         public int RoundNumber;
+        public bool canPlay = true;
+        bool isFinished = false;
         public Difficulty Difficulty;
         public Character computer, player;
+        public Queue<(Action, Character)> actionsQueue = new Queue<(Action, Character) > ();
 
-        public GameManager(Character player, Character computer)
+        public GameManager(Character player, Character computer, SuperCoolFightingGame mainState)
         {
             this.player = player;
             this.computer = computer;
+            this.mainState = mainState;
         }
 
         public void Init()
@@ -20,37 +26,54 @@ namespace SuperCoolFightingGame
             StartNewRound();
         }
 
-        public void MakeActions()
-        {
-            // Every players is defending
-            if (player.CurrentOperation == Operation.Defend && computer.CurrentOperation == Operation.Defend)
-            {
-                Console.WriteLine($"{player.Name} et {computer.Name} se défendent. Il ne se passe rien.");
-                return;
+        public void MakeActions() {
+            if (!canPlay) return;
+
+            actionsQueue.Enqueue((player.StartDefense, player));
+            actionsQueue.Enqueue((computer.StartDefense, computer));
+
+            actionsQueue.Enqueue((delegate () { player.Attack(computer); }, player));
+            actionsQueue.Enqueue((delegate () { player.UseAbility(computer); }, player));
+            actionsQueue.Enqueue((player.EndActions, player));
+
+            actionsQueue.Enqueue((delegate () { computer.Attack(player); }, computer));
+            actionsQueue.Enqueue((delegate () { computer.UseAbility(player); }, computer));
+            actionsQueue.Enqueue((computer.EndActions, computer));
+
+
+            DoActions();
+        }
+
+        async void DoActions() {
+            canPlay = false;
+
+            while (actionsQueue.Count > 0) {
+                (Action, Character) act = actionsQueue.Dequeue();
+                act.Item1.Invoke();
+
+                await Task.Run(() => {
+                    Task.Delay(act.Item2.currentActionTimeMs).Wait();
+                });
+
+                act.Item2.currentActionTimeMs = 0;
+
+                if (isFinished)
+                    break;
             }
 
-            // Normal attack
-            /*if (player.CurrentOperation == Operation.Attack)
-                Console.WriteLine($"{player.Name} attaque et inflige {player.Attack(computer)} pt de dégat !");
-            if (computer.CurrentOperation == Operation.Attack)
-                Console.WriteLine($"{computer.Name} attaque et inflige {computer.Attack(player)} pt de dégat !");*/
+            if(!isFinished)
+                canPlay = true;
+        }
 
-            // Abilities
-            /* Tank */
-            if (player.CurrentOperation == Operation.Special && player.GetType() == typeof(Tank)) player.UseAbility(computer);
-            if (computer.CurrentOperation == Operation.Special && computer.GetType() == typeof(Tank)) computer.UseAbility(player);
+        public async void GameOver(Character winner) {
+            if (isFinished) return;
 
-            /* Fighter */
-            if (player.CurrentOperation == Operation.Special && player.GetType() == typeof(Fighter)) player.UseAbility(computer);
-            if (computer.CurrentOperation == Operation.Special && computer.GetType() == typeof(Fighter)) computer.UseAbility(player);
+            isFinished = true;
+            canPlay = false;
 
-            /* Enchanter */
-            if (player.CurrentOperation == Operation.Special && player.GetType() == typeof(Healer)) player.UseAbility(computer);
-            if (computer.CurrentOperation == Operation.Special && computer.GetType() == typeof(Healer)) computer.UseAbility(player);
+            await Task.Run(() => { Task.Delay(2000).Wait(); });
 
-            /* Assassin */
-            if (player.CurrentOperation == Operation.Special && player.GetType() == typeof(Assassin)) player.UseAbility(computer);
-            if (computer.CurrentOperation == Operation.Special && computer.GetType() == typeof(Assassin)) computer.UseAbility(player);
+            mainState.AddState(new EndGameState(mainState.gameStateData, winner, !winner.isComputer));   
         }
 
         //4
@@ -58,15 +81,6 @@ namespace SuperCoolFightingGame
         {
             RoundNumber++;
 
-            if (RoundNumber != 1)
-            {
-                player.NewRound();
-                computer.NewRound();
-            }
-
-            Console.WriteLine($"\n----- [ Round {RoundNumber} ] -----");
-            Console.WriteLine($"[JOUEUR] {player.Name} : {player.CurrentHealth} hp ({player.CurrentAttack} atk)");
-            Console.WriteLine($"[IA] {computer.Name} : {computer.CurrentHealth} hp ({computer.CurrentAttack} atk)");
         }
 
         public void Update(float dt) {

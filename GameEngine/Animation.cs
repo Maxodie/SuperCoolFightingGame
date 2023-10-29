@@ -16,19 +16,20 @@ namespace GameEn
         int currentSpriteFrame = 0;
 
         float speed;
-        float duration;
+        public float duration { get; private set; }
         float timer = 0f;
 
         int rectDifference;
 
-        bool isLooping = false;
+        public bool isLooping { get; private set; } = false;
 
         float spriteTimer = 0f;
 
         public EventHandler onEndAnimation;
+        bool resetAnimationOnEnd = true;
 
-
-        public SpriteAnimation(WindowE window, Sprite sprite, Rectangle fullRectSize, int spriteNb, float speed, float duration, bool isLooping = false) {
+        public SpriteAnimation(WindowE window, Sprite sprite, Rectangle fullRectSize, int spriteNb, float speed, float duration, bool isLooping = false, bool resetAnimationOnEnd = true)
+        {
             this.window = window;
             this.sprite = sprite;
             startRect = fullRectSize;
@@ -49,9 +50,11 @@ namespace GameEn
             currentRect = startRect;
 
             isPaused = true;
+            this.resetAnimationOnEnd = resetAnimationOnEnd;
         }
 
         public void Play() {
+            sprite.ChangeImage(sprite.rImage.image, currentRect);
             isPaused = false;
         }
 
@@ -81,8 +84,7 @@ namespace GameEn
                 currentRect.X -= rectDifference;
             else
                 currentRect.X += rectDifference;
-            
-
+        
             sprite.ChangeImage(sprite.rImage.image, currentRect);
            
         }
@@ -112,7 +114,9 @@ namespace GameEn
         void EndAnimation() {
             //play event if exist and reset animation and active looping if true
             onEndAnimation?.Invoke(new object(), new EventArgs());
-            Reset();
+
+            if(resetAnimationOnEnd)
+                Reset();
         }
 
         public void Pause() {

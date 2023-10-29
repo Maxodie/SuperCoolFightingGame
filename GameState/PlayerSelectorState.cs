@@ -7,11 +7,12 @@ namespace SuperCoolFightingGame
 {
     public class PlayerSelectorState : GameState{
         CharacterSelector characterSelector;
+        GameManager gameManager;
 
         Character player;
         Character computer;
 
-        MusicManager musicManager;
+        AudioListener backMusic;
 
         ButtonGUI buttonAssassin;
         ButtonGUI buttonFighter;
@@ -27,9 +28,12 @@ namespace SuperCoolFightingGame
 
         Sprite selectorBorder;
 
-        public PlayerSelectorState(GameStateData data, MusicManager musicManager) : base(data) {
-            this.musicManager = musicManager;
+        Text charactersInfosText;
+
+        public PlayerSelectorState(GameStateData data, AudioListener backMusic) : base(data) {
+            this.backMusic = backMusic;
             characterSelector = new CharacterSelector();
+            gameManager = new GameManager(player, computer, superCoolFightingGame);
         }
 
         /// <summary>
@@ -63,6 +67,8 @@ namespace SuperCoolFightingGame
             buttonTank = new ButtonGUI(new Vector2(584, 424), new Size(168, 168), "", gameE.fonts["Pixel40"], new Rectangle(0, 0, 168, 168), tankFace, tankFace, tankFace, false);
             buttonTank.onClick += delegate (object sender, EventArgs e) { SelectCharacter(sender, e, buttonTank, tankIcon, new Vector2(608, 448), new Vector2(584, 424), typeof(Tank)); };
 
+            charactersInfosText = new Text(Color.White, new Vector2(48, 250), "Character :\nnot selected", gameE.fonts["Pixel16"]);
+            gameE.AddTextToRender(charactersInfosText);
         }
 
         /// <summary>
@@ -100,8 +106,8 @@ namespace SuperCoolFightingGame
         }
 
         void StartMainGame() {
-            musicManager.StopMusic();
-            superCoolFightingGame.AddState(new MainGameState(gameStateData, player, computer));
+            backMusic.Stop();
+            superCoolFightingGame.AddState(new MainGameState(gameStateData, gameManager, player, computer));
         }
 
         void ConfirmSelection(object sender, EventArgs e) {
@@ -141,8 +147,9 @@ namespace SuperCoolFightingGame
             currentCharacterPos = pos;
             currentIcon.btnSprite.ChangePos(newImagePos);
             currentIcon.ChangeImages(newImage, newImage, newImage, new Rectangle(0, 0, 120, 120));
-            
 
+            CharacterStats characterData = characterSelector.characterDatabase.GetCharacterDataWithType(characterType);
+            charactersInfosText.text = $"Character :\nName : {characterData.Name}\nLife : {characterData.BaseHealth}\nAttack Point : {characterData.BaseAttack}";
 
             if (startBtn == null) {
 
@@ -159,10 +166,10 @@ namespace SuperCoolFightingGame
 
         public void ConfirmCharacterSelection() {
 
-            characterSelector.Confirm(out player);
+            characterSelector.Confirm(out player, false, gameManager);
 
             characterSelector.Select();
-            characterSelector.Confirm(out computer);
+            characterSelector.Confirm(out computer, true, gameManager);
         }
     }
 }

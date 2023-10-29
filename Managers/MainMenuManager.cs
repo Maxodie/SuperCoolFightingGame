@@ -10,13 +10,13 @@ namespace SuperCoolFightingGame
         ButtonGUI startButton;
         ButtonGUI quitButton;
 
-        MusicManager musicManager;
+        AudioListener backMusic;
         SpriteAnimation startBtnAnim;
         SpriteAnimation closeBtnAnim;
 
-        public MainMenuManager(GameStateData gameData, MusicManager musicManager) { 
+        public MainMenuManager(GameStateData gameData, AudioListener backMusic) { 
             this.gameData = gameData;
-            this.musicManager = musicManager;
+            this.backMusic = backMusic;
         }
 
         public void InitGUI() {
@@ -54,7 +54,7 @@ namespace SuperCoolFightingGame
         }
 
         void StartEvent() {
-            gameData.superCoolFightingGame.AddState(new DifficultySelectorState(gameData, musicManager));
+            gameData.superCoolFightingGame.AddState(new DifficultySelectorState(gameData, backMusic));
         }
 
         public void Update(float dt) {

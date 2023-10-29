@@ -5,3 +5,5 @@ C:\Users\maxod\Desktop\CNAM-ENJMIN_cours\UE44_base_C#\SuperCoolFightingGame\Supe
 C:\Users\maxod\Desktop\CNAM-ENJMIN_cours\UE44_base_C#\SuperCoolFightingGame\SuperCoolFightingGame\bin\Debug\SuperCoolFightingGame.pdb
 C:\Users\maxod\Desktop\CNAM-ENJMIN_cours\UE44_base_C#\SuperCoolFightingGame\SuperCoolFightingGame\obj\Debug\SuperCoolFightingGame.exe
 C:\Users\maxod\Desktop\CNAM-ENJMIN_cours\UE44_base_C#\SuperCoolFightingGame\SuperCoolFightingGame\obj\Debug\SuperCoolFightingGame.pdb
+C:\Users\maxod\Desktop\CNAM-ENJMIN_cours\UE44_base_C#\SuperCoolFightingGame\SuperCoolFightingGame\obj\Debug\SuperCoolFightingGame.Properties.Resources.resources
+C:\Users\maxod\Desktop\CNAM-ENJMIN_cours\UE44_base_C#\SuperCoolFightingGame\SuperCoolFightingGame\obj\Debug\SuperCoolFightingGame.csproj.GenerateResource.cache

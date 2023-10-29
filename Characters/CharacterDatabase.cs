@@ -1,4 +1,5 @@
 using System;
+using System.Drawing;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
@@ -14,6 +15,15 @@ namespace SuperCoolFightingGame
     {
       GetInheritedClasses();
       InitCharacterDatabase();
+    }
+
+    public CharacterStats GetCharacterDataWithType(Type Type) {
+        for(int i=0; i < CharacterTypesList.Count; i++) {
+            if (CharacterStatsList[i].characterType == Type)
+                return CharacterStatsList[i];
+        }
+
+        return null;
     }
     
     public void GetInheritedClasses()
@@ -32,10 +42,6 @@ namespace SuperCoolFightingGame
         "Vlad",
         3,
         2,
-        1,
-        1,
-        0,
-        0,
         "specialVlad",
         "specialVladH",
         "specialVladP",
@@ -46,7 +52,10 @@ namespace SuperCoolFightingGame
         "vladIdle",
         "vladDeath",
         "vladDamaged",
+        "vladSpecial",//
+        "fighterIcon",//
         "attackAnimation",
+        "defendAnimationStart",
         "defendAnimationEnd"
       );
       CharacterStatsList.Add(fighter);
@@ -56,10 +65,6 @@ namespace SuperCoolFightingGame
         "Luna",
         4, //12
         1, //1
-        1,
-        1, //10
-        0,
-        0,
         "specialLuna",
         "specialLunaH",
         "specialLunaP",
@@ -70,7 +75,10 @@ namespace SuperCoolFightingGame
         "lunaIdle",
         "lunaDeath",
         "lunaDamaged",
+        "lunaSpecial",
+        "enchanterIcon",
         "attackAnimation",
+        "defendAnimationStart",
         "defendAnimationEnd"
         ); //3
       CharacterStatsList.Add(healer);
@@ -80,10 +88,6 @@ namespace SuperCoolFightingGame
         "Nan",
         5, //15
         1, //1
-        1,
-        1, //20
-        0,
-        0,
         "specialNan",
         "specialNanH",
         "specialNanP",
@@ -94,7 +98,10 @@ namespace SuperCoolFightingGame
         "nanIdle",
         "nanDeath",
         "nanDamaged",
+        "nanSpecial",
+        "tankIcon",
         "attackAnimation",
+        "defendAnimationStart",
         "defendAnimationEnd"
         ); //1
       CharacterStatsList.Add(tank);
@@ -104,10 +111,6 @@ namespace SuperCoolFightingGame
         "Guni",
         3, //8
         2, //3
-        1, //20
-        1, //10
-        0,
-        0,
         "specialGuni",
         "specialGuniH",
         "specialGuniP",
@@ -118,7 +121,10 @@ namespace SuperCoolFightingGame
         "guniIdle",
         "guniDeath",
         "guniDamaged",
+        "",
+        "assassinIcon",
         "attackAnimation",
+        "defendAnimationStart",
         "defendAnimationEnd"
         ); //3
       CharacterStatsList.Add(assassin);

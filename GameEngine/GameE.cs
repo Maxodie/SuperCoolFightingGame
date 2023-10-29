@@ -17,8 +17,6 @@ namespace GameEn
         DateTime lastDtTime;
         DateTime currentDtTime;
 
-        Thread _gameThread;
-
         public GameE(WindowE window) {
             this.window = window;
         }

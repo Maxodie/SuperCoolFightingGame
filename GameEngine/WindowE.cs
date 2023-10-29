@@ -67,8 +67,8 @@ namespace GameEn
             Size = new Size(WIDTH, HEIGHT);
             FormBorderStyle = FormBorderStyle.None;
             StartPosition = FormStartPosition.Manual;
-            Location = new Point(Screen.PrimaryScreen.Bounds.Width / 2 - WIDTH / 3 , Screen.PrimaryScreen.Bounds.Height / 2 - HEIGHT / 3);
-
+            Location = new Point(Screen.PrimaryScreen.Bounds.Width / 2 - WIDTH / 3, Screen.PrimaryScreen.Bounds.Height / 2 - HEIGHT / 3);
+            Icon = new Icon(AppDomain.CurrentDomain.BaseDirectory + "Media/tankFace.ico");
         }
 
 

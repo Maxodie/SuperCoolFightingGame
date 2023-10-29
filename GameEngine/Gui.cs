@@ -126,7 +126,7 @@ namespace GUI
         public async void PerformClick(object sender, EventArgs e) {
             //Change visual with onClick event
             if (isImageBtn) {
-                if (!pressImgEffect) {
+                if (pressImgEffect) {
                     btnSprite.ChangeImage(btnImages[1]);
                     btn.Refresh();
                 }

@@ -16,7 +16,7 @@ namespace GameEn
 
             if (musicDefaultLocation != "") {
                 //Load the music with the location
-                mediaPlayer.Open(new System.Uri(AppDomain.CurrentDomain.BaseDirectory + musicDefaultLocation));
+                mediaPlayer.Open(new Uri(AppDomain.CurrentDomain.BaseDirectory + musicDefaultLocation));
 
                 if (playAtStart) {
                     Play();
@@ -44,7 +44,7 @@ namespace GameEn
 
         public void ChangeSound(string musicLocation) {
             //Load a new sound
-            mediaPlayer.Open(new System.Uri(musicLocation));
+            mediaPlayer.Open(new Uri(musicLocation));
         }
         
     }

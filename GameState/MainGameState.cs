@@ -16,13 +16,17 @@ namespace SuperCoolFightingGame
         ButtonGUI defenseOperation;
         ButtonGUI specialOperation;
 
+        //Stats
+
         //Audio
         MusicManager musicManager;
              
-        public MainGameState(GameStateData data, Character player, Character computer) : base(data) {
+        public MainGameState(GameStateData data, GameManager gm, Character player, Character computer) : base(data) {
             musicManager = new MusicManager("Media/sounds/game");
             operationSelector = new OperationSelector(data.difficulty);
-            gameManager = new GameManager(player, computer);
+            gameManager = gm;
+            gameManager.player = player;
+            gameManager.computer = computer;
         }
 
 
@@ -37,9 +41,9 @@ namespace SuperCoolFightingGame
             Image defenseHighlightImageBtn = imageLoader.GetImage("defendH");
             Image defensePressedImageBtn = imageLoader.GetImage("defendP");
 
-            Image specialImageBtn = imageLoader.GetImage(gameManager.player.CharacterSpecialBtnImgPath);
-            Image specialImageHighlightBtn = imageLoader.GetImage(gameManager.player.CharacterSpecialBtnHighlightImgPath);
-            Image specialImagePressedBtn = imageLoader.GetImage(gameManager.player.CharacterSpecialBtnPressedImgPath);
+            Image specialImageBtn = imageLoader.GetImage(gameManager.player.characterSpecialBtnImgPath);
+            Image specialImageHighlightBtn = imageLoader.GetImage(gameManager.player.characterSpecialBtnHighlightImgPath);
+            Image specialImagePressedBtn = imageLoader.GetImage(gameManager.player.characterSpecialBtnPressedImgPath);
 
 
             hearthSeparator = new Sprite(imageLoader.GetImage("separator"), new Rectangle(0, 0, 32, 88), new Vector2(384, 40));
@@ -53,21 +57,6 @@ namespace SuperCoolFightingGame
 
             specialOperation = new ButtonGUI(new Vector2(640, 480), new Size(128, 128), "", gameE.fonts["Pixel40"], new Rectangle(0, 0, 128, 128), specialImageHighlightBtn, specialImageBtn, specialImagePressedBtn, true);
             specialOperation.onClick += delegate (object sender, EventArgs e) { StartOperations(sender, e, Operation.Special); };
-
-            //Image btnImage1 = imageLoader.GetImage("Scroll");
-            //Image btnImage2 = imageLoader.GetImage("ScrollHighlight");
-            //quitButton = new ButtonGUI(window, new Vector2(184, 400), new Size(448, 96), "Quit", gameStateData.fonts["Pixel40"], btnImage2, btnImage1, btnImage2);
-
-            //quitButton.onClick += delegate (object sender, EventArgs e) { ReturnToMainMenu(sender, e, 1); };
-
-            //shieldTest = new Sprite(imageLoader.GetImage("DefendAnimationStart"), new Rectangle(0, 0, 152, 152), new Vector2(96, 216));
-            //gameE.AddSpriteToRender(shieldTest);
-
-            //animation = new SpriteAnimation(shieldTest, new Rectangle(2432, 0, 152, 152), 16, 1f, 0.5f);
-            //animation.onEndAnimation += Testc;
-
-            //AddAnimation(animation);
-            //animation.Play();
         }
 
         /// <summary>
@@ -77,11 +66,14 @@ namespace SuperCoolFightingGame
             base.Start();
 
             //gameManager.Init();
-            gameManager.player.LoadGFX(imageLoader, gameE, new Vector2(112, 232), new Vector2(104, 336), false);
-            gameManager.computer.LoadGFX(imageLoader, gameE, new Vector2(552, 176), new Vector2(560, 280), true);
+            gameManager.player.LoadCharacter(imageLoader, gameE, new Vector2(112, 232), new Vector2(104, 336), false, new Vector2(96, 216), 
+                new Vector2(520, 248), new Vector2(168, 272), new Vector2(544, 216), new Vector2(56, 40), new Vector2(280, 96));
+
+            gameManager.computer.LoadCharacter(imageLoader, gameE, new Vector2(552, 176), new Vector2(560, 280), true, new Vector2(544, 160), 
+                new Vector2(176, 304), new Vector2(544, 216), new Vector2(168, 272), new Vector2(432, 40), new Vector2(440, 96));
+
             gameManager.player.InitAnimations(imageLoader);
             gameManager.computer.InitAnimations(imageLoader);
-
         }
 
         /// <summary>
@@ -103,27 +95,6 @@ namespace SuperCoolFightingGame
             musicManager.StopMusic();
         }
 
-        /*public async void Testc(object sender, EventArgs e)
-        {
-            await Task.Run(() => {
-                Task.Delay(10).Wait();
-            });
-
-            RemoveAnimation(animation);
-            gameE.RemoveSpriteFromRender(shieldTest);
-
-        }*/
-
-        /*public void ReturnToMainMenu(object sender, EventArgs e, int selection)
-        {
-            superCoolFightingGame.RemoveState(this);
-
-            RemoveAnimation(animation);
-            gameE.RemoveSpriteFromRender(shieldTest);
-            superCoolFightingGame.RemoveState(this);
-            Console.WriteLine(selection);
-        }*/
-
         /// <summary>
         /// Event called on the destroy of the scene
         /// </summary>
@@ -132,6 +103,8 @@ namespace SuperCoolFightingGame
         }
         
         void StartOperations(object sender, EventArgs e, Operation operation) {
+            if (!gameManager.canPlay) return;
+
             operationSelector.PlayerSelection(operation, gameManager.player);
             operationSelector.ComputerSelection(gameManager.computer, gameManager.player);
 

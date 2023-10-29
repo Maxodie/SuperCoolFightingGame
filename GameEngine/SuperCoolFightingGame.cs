@@ -5,9 +5,9 @@ using System.Collections.Generic;
 namespace SuperCoolFightingGame
 {
     public class SuperCoolFightingGame : GameE {
-        List<GameState> states = new List<GameState>();
+        public List<GameState> states { get; private set; } = new List<GameState>();
 
-        GameStateData gameStateData;
+        public GameStateData gameStateData;
 
         public SuperCoolFightingGame(WindowE window) : base(window) {
             InitFonts();
@@ -64,7 +64,7 @@ namespace SuperCoolFightingGame
  
             states.Add(state);
             states[states.Count - 1].Start();
-
+            window.Update();
         }
 
         /// <summary>
@@ -81,6 +81,7 @@ namespace SuperCoolFightingGame
             states.Remove(state);
             if (states.Count > 0)
                 states[states.Count - 1].Start();
+            window.Update();
         }
 
         /// <summary>

@@ -6,7 +6,7 @@ namespace GameEn
     public class Sprite {
         ResizibleImage resizibleImage;
         public ResizibleImage rImage { get { return resizibleImage; } private set { resizibleImage = value; } }
-        Vector2 pos;
+        public Vector2 pos { get; private set; }
         public Rectangle Rect { get { return rect; } private set { rect = value; } }
         Rectangle rect;
         Rectangle defaultRect;
@@ -57,6 +57,11 @@ namespace GameEn
 
         }
 
+        /// <summary>
+        /// Change the image or the image's rect, create bitmap only with new images
+        /// </summary>
+        /// <param name="newImg"></param>
+        /// <param name="newRect"></param>
         public void ChangeImage(Image newImg, Rectangle newRect = new Rectangle()) {
             
             if (newRect != new Rectangle())
@@ -74,8 +79,20 @@ namespace GameEn
             WindowE.instance.Update();
         }
 
-            public void ChangePos(Vector2 newPos) {
+        /// <summary>
+        /// Change the pos to a new pos
+        /// </summary>
+        /// <param name="newPos"></param>
+        public void ChangePos(Vector2 newPos) {
             pos = newPos;
+        }
+
+        /// <summary>
+        /// add a movement to the pos
+        /// </summary>
+        /// <param name="movement"></param>
+        public void Move(Vector2 movement) {
+            pos += movement;
         }
     }
 }

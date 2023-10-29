@@ -11,10 +11,10 @@ namespace SuperCoolFightingGame
         Sprite titleTextSprite;
 
         //Audio
-        MusicManager musicManager;
+        AudioListener backMusic;
 
         public MainMenuState(GameStateData gameStateData): base(gameStateData) {
-            musicManager = new MusicManager("Media/sounds/mainMenu", false);
+            backMusic = new AudioListener(true, "Media/sounds/mainMenu/supermax.mp4", true);
         }
 
         public override void InitGUI() {
@@ -42,7 +42,7 @@ namespace SuperCoolFightingGame
         /// Call on the creation of the state or on the update of all states
         /// </summary>
         public override void Start() {
-            mainMenuManager = new MainMenuManager(gameStateData, musicManager);
+            mainMenuManager = new MainMenuManager(gameStateData, backMusic);
             base.Start();
         }
 

@@ -32,6 +32,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>tankFace.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
@@ -51,6 +54,7 @@
     <Compile Include="GameEngine\ImageLoader.cs" />
     <Compile Include="GameEngine\WindowShaker.cs" />
     <Compile Include="GameState\DifficultySelectorState.cs" />
+    <Compile Include="GameState\EndGameState.cs" />
     <Compile Include="GameState\GameState.cs" />
     <Compile Include="GameState\GameStateData.cs" />
     <Compile Include="GameEngine\Gui.cs" />
@@ -70,6 +74,12 @@
     <Compile Include="Managers\MainMenuManager.cs" />
     <Compile Include="Managers\MusicManager.cs" />
     <Compile Include="Managers\OperationSelector.cs" />
+    <Compile Include="Managers\PlayerHud.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
@@ -77,6 +87,15 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="tankFace.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
