@@ -28,26 +28,29 @@ namespace SuperCoolFightingGame
 
             if (CurrentOperation != Operation.Special) return;
 
+            if (optionalTarget == null) {
+                Console.WriteLine($"Erreur : {Name} a besoin d'une cible pour utiliser sa capacité.");
+                return;
+            }
+            
+            gm.UpdateTextInfos($"{Name} use her power\nand get 1 AP");
+
             animator.PlayAnimation("TankSpe");
       
-            if (optionalTarget == null)
-                Console.WriteLine($"Erreur : {Name} a besoin d'une cible pour utiliser sa capacité.");
-            else
-            {
-                CurrentAttack++;
-                playerHud.GetAttackPoint();
-                RemoveHp(1);
-                //Console.WriteLine($"{Name} utilise sa capacité ! Il inflige {Attack(optionalTarget)} pt de dégats à {optionalTarget.Name} et perd 1 pt de vie.");
+            
+            CurrentAttack++;
+            playerHud.GetAttackPoint();
+            RemoveHp(1);
+            //Console.WriteLine($"{Name} utilise sa capacité ! Il inflige {Attack(optionalTarget)} pt de dégats à {optionalTarget.Name} et perd 1 pt de vie.");
                 
                 
-                await Task.Run(() => { Task.Delay(1000).Wait();});
+            await Task.Run(() => { Task.Delay((int)(specialSelfEffect.duration * 1000) + waitActionTimeOfset).Wait();});
 
 
-                Attack(optionalTarget, true);
+            Attack(optionalTarget, true);
 
-                CurrentAttack--;
-                playerHud.LoseAttackPoint();
-            }
+            CurrentAttack--;
+            playerHud.LoseAttackPoint();
 
         }
     }

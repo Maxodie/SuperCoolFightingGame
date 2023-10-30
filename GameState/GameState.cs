@@ -1,6 +1,4 @@
 ﻿using GameEn;
-using System;
-using System.Collections.Generic;
 
 namespace SuperCoolFightingGame
 {

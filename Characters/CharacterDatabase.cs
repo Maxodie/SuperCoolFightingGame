@@ -54,6 +54,7 @@ namespace SuperCoolFightingGame
         "vladDamaged",
         "vladSpecial",//
         "fighterIcon",//
+        "fighterClassIcon",
         "attackAnimation",
         "defendAnimationStart",
         "defendAnimationEnd"
@@ -77,6 +78,7 @@ namespace SuperCoolFightingGame
         "lunaDamaged",
         "lunaSpecial",
         "enchanterIcon",
+        "enchanterClassIcon",
         "attackAnimation",
         "defendAnimationStart",
         "defendAnimationEnd"
@@ -100,6 +102,7 @@ namespace SuperCoolFightingGame
         "nanDamaged",
         "nanSpecial",
         "tankIcon",
+        "tankClassIcon",
         "attackAnimation",
         "defendAnimationStart",
         "defendAnimationEnd"
@@ -123,6 +126,7 @@ namespace SuperCoolFightingGame
         "guniDamaged",
         "",
         "assassinIcon",
+        "assassinClassIcon",
         "attackAnimation",
         "defendAnimationStart",
         "defendAnimationEnd"

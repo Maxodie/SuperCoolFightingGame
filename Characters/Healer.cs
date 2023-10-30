@@ -24,16 +24,19 @@ namespace SuperCoolFightingGame
         }
 
         public override void UseAbility(Character optionalTarget = null) {
+            if (CurrentOperation != Operation.Special) return;
+
             animator.PlayAnimation("HealerSpe");
 
-            Console.WriteLine($"{Name} utilise sa capacité ! Elle se soigne de {_healValue} pv. ({BaseHealth} pv max)");
+            int currentHeal = _healValue;
 
-            CurrentHealth += _healValue;
+            if (CurrentHealth + currentHeal > BaseHealth)
+                currentHeal = BaseHealth - CurrentHealth;
 
-            if (CurrentHealth > BaseHealth) 
-                CurrentHealth = BaseHealth;
+            gm.UpdateTextInfos($"{Name} use her power to\n heal herself by {currentHeal} hp");
+            CurrentHealth += currentHeal;
 
-            for(int i=0; i < _healValue; i++) {
+            for(int i=0; i < currentHeal; i++) {
                 playerHud.GetHp();
             }
 

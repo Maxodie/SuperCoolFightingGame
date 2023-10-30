@@ -1,6 +1,9 @@
 using System;
+using System.Drawing;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using GameEn;
+using GUI;
 
 namespace SuperCoolFightingGame
 {
@@ -14,6 +17,10 @@ namespace SuperCoolFightingGame
         public Character computer, player;
         public Queue<(Action, Character)> actionsQueue = new Queue<(Action, Character) > ();
 
+        public Text currentGameInfoText;
+
+        public MusicManager musicManager;
+
         public GameManager(Character player, Character computer, SuperCoolFightingGame mainState)
         {
             this.player = player;
@@ -21,9 +28,8 @@ namespace SuperCoolFightingGame
             this.mainState = mainState;
         }
 
-        public void Init()
-        {
-            StartNewRound();
+        public void ReferenceMusicManager(MusicManager musicManager) {
+            this.musicManager = musicManager;
         }
 
         public void MakeActions() {
@@ -33,10 +39,10 @@ namespace SuperCoolFightingGame
             actionsQueue.Enqueue((computer.StartDefense, computer));
 
             actionsQueue.Enqueue((delegate () { player.Attack(computer); }, player));
+            actionsQueue.Enqueue((delegate () { computer.Attack(player); }, computer));
+
             actionsQueue.Enqueue((delegate () { player.UseAbility(computer); }, player));
             actionsQueue.Enqueue((player.EndActions, player));
-
-            actionsQueue.Enqueue((delegate () { computer.Attack(player); }, computer));
             actionsQueue.Enqueue((delegate () { computer.UseAbility(player); }, computer));
             actionsQueue.Enqueue((computer.EndActions, computer));
 
@@ -65,6 +71,15 @@ namespace SuperCoolFightingGame
                 canPlay = true;
         }
 
+        public void UpdateTextInfos(string data) {
+            if (currentGameInfoText == null) {
+                currentGameInfoText = new Text(Color.Black, new Vector2(375, 404), "", mainState.fonts["Pixel16"]);
+                mainState.AddTextToRender(currentGameInfoText);
+            }
+            
+            currentGameInfoText.text = data;
+        }
+
         public async void GameOver(Character winner) {
             if (isFinished) return;
 
@@ -73,7 +88,7 @@ namespace SuperCoolFightingGame
 
             await Task.Run(() => { Task.Delay(2000).Wait(); });
 
-            mainState.AddState(new EndGameState(mainState.gameStateData, winner, !winner.isComputer));   
+            mainState.AddState(new EndGameState(mainState.gameStateData, winner, !winner.isComputer, musicManager));   
         }
 
         //4

@@ -9,13 +9,13 @@ namespace SuperCoolFightingGame
         #region InstanceVariables
 
         protected GameE gameE;
-        GameManager gm;
+        protected GameManager gm;
 
         protected PlayerHud playerHud;
 
         public Sprite playerSprite;
         bool isFliped;
-        const int waitActionTimeOfset = 500;
+        protected const int waitActionTimeOfset = 500;
         public bool isComputer { get; private set; }
 
         Sprite SpriteEnemyEffect;
@@ -116,7 +116,7 @@ namespace SuperCoolFightingGame
             defendEndSprite = new Sprite(imageLoader.GetImage(defenseEndEffect), new Rectangle(0, 0, 152, 152), playerDefendEffectPos);
             defendEndAnimEffect = new SpriteAnimation(WindowE.instance, defendEndSprite, new Rectangle(0, 0, 1520, 152), 10, 1f, 1f);
 
-            animator.AddAnimation(imageLoader.GetImage(characterDamagedPath), new Rectangle(0, 0, 128, 128), new Rectangle(0, 0, 2176, 128), 17, 1f, 1f, "Damaged");
+            animator.AddAnimation(imageLoader.GetImage(characterDamagedPath), new Rectangle(0, 0, 128, 128), new Rectangle(0, 0, 2176, 128), 17, 1f, 0.5f, "Damaged");
             animator.PlayAnimation("Idle");
 
             //Attack pos
@@ -137,15 +137,17 @@ namespace SuperCoolFightingGame
           CurrentDodgeRate = BaseDodgeRate;
         }
     
-        public virtual void Attack(Character target, bool forceAttack = false) {
+        public virtual void Attack(Character target, bool forceAttack = false, bool doAnimation = true) {
             if (!forceAttack && CurrentOperation != Operation.Attack) return;
 
             // Return amount of damages
-            target.TakeDamage(this);
+            int damage = target.TakeDamage(this);
+            gm.UpdateTextInfos($"{Name} attacks {target.Name} who\nloses {damage}Hp");
 
-
-            attackAnimEffect.Play();
-            gameE.AddSpriteToRender(SpriteEnemyEffect);
+            if (doAnimation) {
+                attackAnimEffect.Play();
+                gameE.AddSpriteToRender(SpriteEnemyEffect);
+            }
             
             currentActionTimeMs = (int)(attackAnimEffect.duration * 1000) + waitActionTimeOfset;
         }
@@ -160,21 +162,23 @@ namespace SuperCoolFightingGame
             specialEnemyEffect?.Update(dt);
         }
     
-        public virtual void TakeDamage(Character attacker)
+        public virtual int TakeDamage(Character attacker)
         {
             // Return amount of damages
-            Random rand = new Random();
-
+ 
             int damage = attacker.CurrentAttack;
             if (CurrentOperation == Operation.Defend)
             {
-                if (damage > 0) 
+                if (damage > 0)
                     damage--;
-            } else {
-                animator.PlayAnimation("Damaged");
             }
 
-            RemoveHp(damage, attacker);
+            if (damage > 0) {
+                animator.PlayAnimation("Damaged");
+                RemoveHp(damage, attacker);
+            }
+
+            return damage;
         }
 
         protected void RemoveHp(int damage, Character attacker = null) {
@@ -188,7 +192,6 @@ namespace SuperCoolFightingGame
 
             if (CurrentHealth <= 0)
             {
-                Console.WriteLine("End");
                 if(attacker == null) {
                     if(isComputer)
                         gm.GameOver(gm.player);
@@ -215,6 +218,8 @@ namespace SuperCoolFightingGame
 
         public void StartDefense() {
             if (CurrentOperation != Operation.Defend) return;
+
+            gm.UpdateTextInfos($"{Name} active his shield");
 
             defendStartAnimEffect.Play();
             gameE.AddSpriteToRender(defendStartSprite);

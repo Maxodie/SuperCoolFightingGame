@@ -25,11 +25,11 @@ namespace SuperCoolFightingGame
             specialEnemyEffect.onEndAnimation += delegate (object sender, EventArgs e) { gameE.RemoveSpriteFromRender(spriteSpecialEnemyEffect); };
         }
 
-        public override void Attack(Character target, bool isForce = false)
+        public override void Attack(Character target, bool isForce = false, bool doAnim = true)
         {
             if (_abilityCharged && target.CurrentOperation == Operation.Defend) CurrentAttack++;
             
-            base.Attack(target, isForce);
+            base.Attack(target, isForce, doAnim);
             
             if (_abilityCharged && target.CurrentOperation == Operation.Defend) CurrentAttack--;
             return;
@@ -38,8 +38,7 @@ namespace SuperCoolFightingGame
         public override void UseAbility(Character optionalTarget = null) {
             if (CurrentOperation != Operation.Special) return;
 
-
-            Console.WriteLine($"{Name} utilise sa capcité ! Sa prochaine attaque pourra transpercer la défense adverse.");
+            gm.UpdateTextInfos($"{Name} uses his skill to pierce\n enemy's armor next turn");
             _abilityCharged = true;
 
             base.UseAbility();

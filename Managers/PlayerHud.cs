@@ -1,7 +1,7 @@
 ﻿using GameEn;
 using System;
 using System.Drawing;
-using System.Linq;
+using GUI;
 
 namespace SuperCoolFightingGame
 {
@@ -58,8 +58,11 @@ namespace SuperCoolFightingGame
             Sprite characterBorder = new Sprite(imageLoader.GetImage("characterBorder"), new Rectangle(0, 0, 288, 168), new Vector2(48, 440));
             gameE.AddSpriteToRender(characterBorder);
 
-            Sprite characterTypeIcon = new Sprite(imageLoader.GetImage(character.characterTypeIconPath), new Rectangle(0, 0, 288, 168), new Vector2(48, 440));
+            Sprite characterTypeIcon = new Sprite(imageLoader.GetImage(character.characterTypeIconPath), new Rectangle(0, 0, 48, 48), new Vector2(232, 464));
             gameE.AddSpriteToRender(characterTypeIcon);
+
+            Text nameText = new Text(Color.Black, new Vector2(220, 550), character.Name, gameE.fonts["Pixel16"]);
+            gameE.AddTextToRender(nameText);
         }
 
         void InitHearts(bool leftToRight) {
@@ -98,9 +101,8 @@ namespace SuperCoolFightingGame
         }
 
         public void LoseHp() {
-            if (currentHeartNb < 0) return;
+            if (currentHeartNb <= 0) return;
 
-            Console.WriteLine(currentHeartNb + "hp lose");
             hearts[currentHeartNb - 1].ChangeImage(imageLoader.GetImage("emptyHeart"));
             currentHeartNb--;
         }
@@ -108,21 +110,20 @@ namespace SuperCoolFightingGame
         public void GetHp() {
             if (currentHeartNb >= heartNb) return;
 
-            Console.WriteLine(currentHeartNb + "hp Get");
             hearts[currentHeartNb].ChangeImage(imageLoader.GetImage("filledHeart"));
             currentHeartNb++;
         }
 
         public void LoseAttackPoint() {
             if (currentAttackNb <= 0) return;
-            Console.WriteLine(currentAttackNb - 1 + "ap Lose");
+
             attacks[currentAttackNb - 1].ChangeImage(imageLoader.GetImage("emptyAttackPoint"));
             currentAttackNb--;
         }
 
         public void GetAttackPoint() {
             if(currentAttackNb >= attackNb) return;
-            Console.WriteLine(currentAttackNb + "ap get");
+
             currentAttackNb++;
             attacks[currentAttackNb - 1].ChangeImage(imageLoader.GetImage("filledAttackPoint"));
         }

@@ -12,6 +12,7 @@ namespace SuperCoolFightingGame
         Vector2 projectilDir;
         int projectilTravelTimeMs = 1000;
         bool ispwepwe = false;
+        Character optionalTarget;
         public Fighter(CharacterStats data, bool isComputer, GameManager gm) : base(data, isComputer, gm) { }
 
         public override void InitAnimations(ImageLoader imageLoader) {
@@ -55,6 +56,10 @@ namespace SuperCoolFightingGame
 
                     gameE.AddSpriteToRender(projectilExplosion);
                     projectilExplosionAnim.Play();
+
+                    Attack(optionalTarget, true, false);
+                    CurrentAttack = BaseAttack;
+                    _damageTaken = 0;
                 }
 
             }
@@ -63,6 +68,14 @@ namespace SuperCoolFightingGame
         public override void UseAbility(Character optionalTarget = null)
         {
             if (CurrentOperation != Operation.Special) return;
+
+            if(optionalTarget == null)
+            {
+                Console.WriteLine($"Erreur : {Name} a besoin d'une cible pour utiliser sa capacité.");
+                return;
+            }
+
+            this.optionalTarget = optionalTarget;
 
             animator.PlayAnimation("FighterSpe");
 
@@ -77,16 +90,10 @@ namespace SuperCoolFightingGame
 
             }
 
-            if (optionalTarget == null)
-                Console.WriteLine($"Erreur : {Name} a besoin d'une cible pour utiliser sa capacité.");
-            else
-            {
-                CurrentAttack = _damageTaken;
-                Attack(optionalTarget);
-                //Console.WriteLine($"{Name} utilise sa capacité ! Il retourne les dégats reçus et inflige donc {Attack(optionalTarget)} pt de dégats à {optionalTarget.Name}.");
-                CurrentAttack = BaseAttack;
-                _damageTaken = 0;
-            }
+            gm.UpdateTextInfos($"{Name} is sending back\nenemy damages");
+
+            CurrentAttack = _damageTaken;
+            
 
             base.UseAbility();
         }

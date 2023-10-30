@@ -16,8 +16,6 @@ namespace SuperCoolFightingGame
         ButtonGUI defenseOperation;
         ButtonGUI specialOperation;
 
-        //Stats
-
         //Audio
         MusicManager musicManager;
              
@@ -25,6 +23,7 @@ namespace SuperCoolFightingGame
             musicManager = new MusicManager("Media/sounds/game");
             operationSelector = new OperationSelector(data.difficulty);
             gameManager = gm;
+            gameManager.ReferenceMusicManager(musicManager);
             gameManager.player = player;
             gameManager.computer = computer;
         }
@@ -57,6 +56,10 @@ namespace SuperCoolFightingGame
 
             specialOperation = new ButtonGUI(new Vector2(640, 480), new Size(128, 128), "", gameE.fonts["Pixel40"], new Rectangle(0, 0, 128, 128), specialImageHighlightBtn, specialImageBtn, specialImagePressedBtn, true);
             specialOperation.onClick += delegate (object sender, EventArgs e) { StartOperations(sender, e, Operation.Special); };
+
+            //Dialog scroll
+            Sprite dialogScroll = new Sprite(imageLoader.GetImage("scroll"), new Rectangle(0, 0, 448, 96), new Vector2(336, 384));
+            gameE.AddSpriteToRender(dialogScroll);
         }
 
         /// <summary>
@@ -92,7 +95,6 @@ namespace SuperCoolFightingGame
         public override void OnStopRender() {
             base.OnStopRender();
 
-            musicManager.StopMusic();
         }
 
         /// <summary>
