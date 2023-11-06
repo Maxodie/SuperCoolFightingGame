@@ -1,4 +1,6 @@
+using GameEn;
 using System;
+using System.Collections.Generic;
 
 namespace SuperCoolFightingGame
 {
@@ -21,7 +23,7 @@ namespace SuperCoolFightingGame
                 _temporaryCharacterType = characterType;
         }
 
-        public void Confirm(out Character newCharacter, bool isComputer, GameManager gm)
+        public void Confirm(out Character newCharacter, bool isComputer, GameManager gm, Dictionary<string, AudioListener> savedAudio)
         {
             // Set player or enemy as _temporaryCharacter
             int statIndex = characterDatabase.CharacterStatsList
@@ -29,7 +31,7 @@ namespace SuperCoolFightingGame
             
             newCharacter = (Character)Activator.CreateInstance(
                 _temporaryCharacterType,
-                characterDatabase.CharacterStatsList[statIndex], isComputer, gm);
+                characterDatabase.CharacterStatsList[statIndex], isComputer, gm, savedAudio);
         }
     }
 }

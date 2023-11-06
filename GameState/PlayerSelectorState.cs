@@ -12,8 +12,6 @@ namespace SuperCoolFightingGame
         Character player;
         Character computer;
 
-        AudioListener backMusic;
-
         ButtonGUI buttonAssassin;
         ButtonGUI buttonFighter;
         ButtonGUI buttonHealer;
@@ -32,8 +30,7 @@ namespace SuperCoolFightingGame
 
         Text charactersInfosText;
 
-        public PlayerSelectorState(GameStateData data, AudioListener backMusic) : base(data) {
-            this.backMusic = backMusic;
+        public PlayerSelectorState(GameStateData data) : base(data) {
             characterSelector = new CharacterSelector();
             gameManager = new GameManager(player, computer, superCoolFightingGame);
         }
@@ -122,8 +119,7 @@ namespace SuperCoolFightingGame
         }
 
         void StartMainGame() {
-            superCoolFightingGame.AddState(new MainGameState(gameStateData, gameManager, player, computer, backMusic));
-            backMusic = null;
+            superCoolFightingGame.AddState(new MainGameState(gameStateData, gameManager, player, computer));
             player = null;
             computer = null;
         }
@@ -201,10 +197,10 @@ namespace SuperCoolFightingGame
 
         public void ConfirmCharacterSelection() {
 
-            characterSelector.Confirm(out player, false, gameManager);
+            characterSelector.Confirm(out player, false, gameManager, gameStateData.savedAudio);
 
             characterSelector.Select();
-            characterSelector.Confirm(out computer, true, gameManager);
+            characterSelector.Confirm(out computer, true, gameManager, gameStateData.savedAudio);
         }
     }
 }

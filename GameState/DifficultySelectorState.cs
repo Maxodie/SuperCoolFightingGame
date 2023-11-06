@@ -6,8 +6,6 @@ using System;
 namespace SuperCoolFightingGame
 {
     public class DifficultySelectorState : GameState {
-        AudioListener backMusic;
-
         Sprite selectionBorder;
 
         ButtonGUI easyDifficulty;
@@ -19,8 +17,7 @@ namespace SuperCoolFightingGame
         SpriteAnimation spriteStartButtonAnimation;
         Text difficultyText;
 
-        public DifficultySelectorState(GameStateData data, AudioListener backMusic) : base(data) {
-            this.backMusic = backMusic;
+        public DifficultySelectorState(GameStateData data) : base(data) {
         }
 
 
@@ -91,7 +88,7 @@ namespace SuperCoolFightingGame
         }
 
         void SwitchToPlayerSelector() {
-            superCoolFightingGame.AddState(new PlayerSelectorState(gameStateData, backMusic));
+            superCoolFightingGame.AddState(new PlayerSelectorState(gameStateData));
 
         }
 

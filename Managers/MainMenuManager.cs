@@ -60,7 +60,7 @@ namespace SuperCoolFightingGame
         }
 
         void StartEvent() {
-            gameData.superCoolFightingGame.AddState(new DifficultySelectorState(gameData, backMusic));
+            gameData.superCoolFightingGame.AddState(new DifficultySelectorState(gameData));
         }
 
         public void Update(float dt) {

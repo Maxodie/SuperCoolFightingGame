@@ -1,6 +1,7 @@
 using GameEn;
 using System.Drawing;
 using System;
+using System.Collections.Generic;
 
 namespace SuperCoolFightingGame
 {
@@ -8,12 +9,12 @@ namespace SuperCoolFightingGame
     {
         bool _abilityCharged;
       
-        public Assassin(CharacterStats data, bool isComputer, GameManager gm) : base(data, isComputer, gm) { }
+        public Assassin(CharacterStats data, bool isComputer, GameManager gm, Dictionary<string, AudioListener> savedAudio) : base(data, isComputer, gm, savedAudio) {
+            specialSound = savedAudio["guniSpe"];
+        }
 
         public override void InitAnimations(ImageLoader imageLoader) {
             base.InitAnimations(imageLoader);
-
-            specialSound = new AudioListener(false, "Media/sounds/SFX/GuniSpecial.wav");
 
             specialEnemyEffectPos = isComputer ? new Vector2(104, 216) : new Vector2(560, 160); //
             specialSelfEffectPos = !isComputer ? new Vector2(112, 232) : new Vector2(552, 176);

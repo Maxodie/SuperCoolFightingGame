@@ -1,5 +1,6 @@
 using GameEn;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace SuperCoolFightingGame
@@ -80,10 +81,12 @@ namespace SuperCoolFightingGame
         AudioListener defendEndSound;
         protected AudioListener specialSound;
 
+        protected Dictionary<string, AudioListener> savedAudio;
         #endregion
 
-        public Character(CharacterStats data, bool isComputer, GameManager gm)
+        public Character(CharacterStats data, bool isComputer, GameManager gm, Dictionary<string, AudioListener> savedAudio)
         {
+            this.savedAudio = savedAudio;
             Name = data.Name;
             BaseHealth = data.BaseHealth;
             BaseAttack = data.BaseAttack;
@@ -113,9 +116,6 @@ namespace SuperCoolFightingGame
         }
 
         public virtual void InitAnimations(ImageLoader imageLoader) {
-            this.attackSound = new AudioListener(false, "Media/sounds/SFX/Attack.wav");
-            this.defendStartSound = new AudioListener(false, "Media/sounds/SFX/DefendStart.wav");
-            this.defendEndSound = new AudioListener(false, "Media/sounds/SFX/DefendEnd.wav");
 
             //Character Animator
             animator = new Animator(WindowE.instance, playerSprite);
@@ -152,9 +152,14 @@ namespace SuperCoolFightingGame
 
         void InitCharacter()
         {
-          CurrentHealth = BaseHealth;
-          CurrentAttack = BaseAttack;
-          CurrentDodgeRate = BaseDodgeRate;
+            CurrentHealth = BaseHealth;
+            CurrentAttack = BaseAttack;
+            CurrentDodgeRate = BaseDodgeRate;
+
+            //Audio
+            attackSound = savedAudio["attack"];
+            defendStartSound = savedAudio["defendStart"];
+            defendEndSound = savedAudio["defendEnd"];
         }
     
         public virtual void Attack(Character target, bool forceAttack = false, bool doAnimation = true, bool doText = true) {

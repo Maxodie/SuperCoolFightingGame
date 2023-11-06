@@ -1,5 +1,6 @@
 using GameEn;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace SuperCoolFightingGame
@@ -8,12 +9,12 @@ namespace SuperCoolFightingGame
     {
         int _healValue = 2;
     
-        public Healer(CharacterStats data, bool isComputer, GameManager gm) : base(data, isComputer, gm) { }
+        public Healer(CharacterStats data, bool isComputer, GameManager gm, Dictionary<string, AudioListener> savedAudio) : base(data, isComputer, gm, savedAudio) {
+            specialSound = savedAudio["lunaSpe"];
+        }
 
         public override void InitAnimations(ImageLoader imageLoader) {
             base.InitAnimations(imageLoader);
-
-            specialSound = new AudioListener(false, "Media/sounds/SFX/LunaSpecial.wav");
 
             specialSelfEffectPos = !isComputer ? new Vector2(96, 176) : new Vector2(536, 120);
 

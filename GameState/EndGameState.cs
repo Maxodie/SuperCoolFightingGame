@@ -9,7 +9,7 @@ namespace SuperCoolFightingGame
         Character winner;
         bool isPlayerWin;
         Text infosText;
-        Text titleText;
+        Sprite titleTextSprite;
 
         ButtonGUI restartBtn;
         SpriteAnimation btnAnim;
@@ -30,8 +30,13 @@ namespace SuperCoolFightingGame
             string result = isPlayerWin ? "WIN" : "LOOSE";
             Vector2 textPos = isPlayerWin ? new Vector2(320, 50) : new Vector2(300, 50);
 
-            titleText = new Text(Color.White, textPos, result, gameE.fonts["Pixel40"]);
-            gameE.AddTextToRender(titleText);
+
+            if (isPlayerWin)//232;40 (368x152)
+                titleTextSprite = new Sprite(imageLoader.GetImage("winTitle"), new Rectangle(0, 0, 368, 152), new Vector2(232, 40));
+            else
+                titleTextSprite = new Sprite(imageLoader.GetImage("loseTitle"), new Rectangle(0, 0, 368, 152), new Vector2(232, 40));
+
+            gameE.AddSpriteToRender(titleTextSprite);
 
             Image scrollStartOpen = imageLoader.GetImage("scrollExitOpen");
 

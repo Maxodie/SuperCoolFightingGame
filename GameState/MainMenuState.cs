@@ -43,6 +43,18 @@ namespace SuperCoolFightingGame
             if (!gameStateData.savedAudio.ContainsKey("click"))
             {
                 gameStateData.savedAudio["click"] = new AudioListener(false, "Media/sounds/SFX/Click.wav", false);
+                gameStateData.savedAudio["attack"] = new AudioListener(false, "Media/sounds/SFX/Attack.wav");
+                gameStateData.savedAudio["defendStart"] = new AudioListener(false, "Media/sounds/SFX/DefendStart.wav");
+                gameStateData.savedAudio["defendEnd"] = new AudioListener(false, "Media/sounds/SFX/DefendEnd.wav");
+
+                gameStateData.savedAudio["guniSpe"] = new AudioListener(false, "Media/sounds/SFX/GuniSpecial.wav");
+
+                gameStateData.savedAudio["vladSpe"] = new AudioListener(false, "Media/sounds/SFX/VladSpecialStart.wav");
+                gameStateData.savedAudio["vladProject"] = new AudioListener(false, "Media/sounds/SFX/VladProjectile.wav");
+                gameStateData.savedAudio["vladExplo"] = new AudioListener(false, "Media/sounds/SFX/VladSpecialExplosion.wav");
+
+                gameStateData.savedAudio["lunaSpe"] = new AudioListener(false, "Media/sounds/SFX/LunaSpecial.wav");
+                gameStateData.savedAudio["nanSpe"] = new AudioListener(false, "Media/sounds/SFX/NanSpecial.wav");
             }
             
             mainMenuManager = new MainMenuManager(gameStateData, backMusic);
@@ -65,7 +77,6 @@ namespace SuperCoolFightingGame
         public override void OnStopRender() {
             base.OnStopRender();
             mainMenuManager = null;
-            backMusic = null;
         }
 
         /// <summary>

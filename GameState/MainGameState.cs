@@ -15,12 +15,8 @@ namespace SuperCoolFightingGame
         ButtonGUI attackOperation;
         ButtonGUI defenseOperation;
         ButtonGUI specialOperation;
-
-        //Audio
-        AudioListener backMusic;
              
-        public MainGameState(GameStateData data, GameManager gm, Character player, Character computer, AudioListener backMusic) : base(data) {
-            this.backMusic = backMusic;
+        public MainGameState(GameStateData data, GameManager gm, Character player, Character computer) : base(data) {
             operationSelector = new OperationSelector(data.difficulty);
             gameManager = gm;
             gameManager.player = player;

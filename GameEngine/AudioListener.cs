@@ -25,6 +25,7 @@ namespace GameEn
         }
         
         public void Play() {
+            mediaPlayer.Stop();
             mediaPlayer.Play();
         }
 
@@ -35,7 +36,10 @@ namespace GameEn
         /// <param name="e"></param>
         void OnMediaEnd(object sender, EventArgs e) {
             if (isLooping)
+            {
+                Console.WriteLine("tt");
                 Play();
+            }
             else
                 Stop();
         }

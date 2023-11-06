@@ -1,5 +1,6 @@
 using GameEn;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace SuperCoolFightingGame
@@ -17,14 +18,14 @@ namespace SuperCoolFightingGame
         AudioListener projectileSound;
         AudioListener explosionSound;
 
-        public Fighter(CharacterStats data, bool isComputer, GameManager gm) : base(data, isComputer, gm) { }
+        public Fighter(CharacterStats data, bool isComputer, GameManager gm, Dictionary<string, AudioListener> savedAudio) : base(data, isComputer, gm, savedAudio) {
+            specialSound = savedAudio["vladSpe"];
+            projectileSound = savedAudio["vladProject"];
+            explosionSound = savedAudio["vladExplo"];
+        }
 
         public override void InitAnimations(ImageLoader imageLoader) {
             base.InitAnimations(imageLoader);
-
-            specialSound = new AudioListener(false, "Media/sounds/SFX/VladSpecialStart.wav");
-            projectileSound = new AudioListener(false, "Media/sounds/SFX/VladProjectile.wav");
-            explosionSound = new AudioListener(false, "Media/sounds/SFX/VladSpecialExplosion.wav");
 
             //Projectile
             if (characterSpecialProjectileImgPath != "") {

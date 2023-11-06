@@ -1,5 +1,6 @@
 using GameEn;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Threading.Tasks;
 
@@ -7,12 +8,12 @@ namespace SuperCoolFightingGame
 {
     class Tank : Character
     {
-        public Tank(CharacterStats data, bool isComputer, GameManager gm) : base(data, isComputer, gm) { }
+        public Tank(CharacterStats data, bool isComputer, GameManager gm, Dictionary<string, AudioListener> savedAudio) : base(data, isComputer, gm, savedAudio) {
+            specialSound = savedAudio["nanSpe"];
+        }
 
         public override void InitAnimations(ImageLoader imageLoader) {
             base.InitAnimations(imageLoader);
-
-            specialSound = new AudioListener(false, "Media/sounds/SFX/NanSpecial.wav");
 
             specialSelfEffectPos = !isComputer ? new Vector2(88, 200) : new Vector2(544, 144);
 
