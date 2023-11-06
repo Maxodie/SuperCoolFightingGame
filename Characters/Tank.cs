@@ -35,15 +35,14 @@ namespace SuperCoolFightingGame
                 Console.WriteLine($"Erreur : {Name} a besoin d'une cible pour utiliser sa capacité.");
                 return;
             }
-            
-            gm.UpdateTextInfos($"{Name} draws power from \nher blood, gaining 1AP!");
 
             animator.PlayAnimation("TankSpe");
       
-            
             CurrentAttack++;
             playerHud.GetAttackPoint();
             RemoveHp(1);
+
+            gm.UpdateTextInfos($"{Name} draws power from \nher blood, gaining 1AP!");
             //Console.WriteLine($"{Name} utilise sa capacité ! Il inflige {Attack(optionalTarget)} pt de dégats à {optionalTarget.Name} et perd 1 pt de vie.");
 
             specialSound.Play();

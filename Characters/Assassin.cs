@@ -29,12 +29,12 @@ namespace SuperCoolFightingGame
             specialEnemyEffect.onEndAnimation += delegate (object sender, EventArgs e) { gameE.RemoveSpriteFromRender(spriteSpecialEnemyEffect); };
         }
 
-        public override void Attack(Character target, bool isForce = false, bool doAnim = true)
+        public override void Attack(Character target, bool isForce = false, bool doAnim = true, bool doText = true)
         {
 
             if (_abilityCharged && target.CurrentOperation == Operation.Defend) CurrentAttack++;
             
-            base.Attack(target, isForce, doAnim);
+            base.Attack(target, isForce, doAnim, doText);
             
             if (_abilityCharged && target.CurrentOperation == Operation.Defend) CurrentAttack--;
             return;
@@ -55,7 +55,7 @@ namespace SuperCoolFightingGame
 
             specialSound.Play();
 
-            gm.UpdateTextInfos($"{Name} is identifying the\n enemy's weakness...");
+            gm.UpdateTextInfos($"{Name} is identifying the \nenemy's weakness...");
 
             currentActionTimeMs = (int)(specialSelfEffect.duration * 1000) + waitActionTimeOffset;
         }

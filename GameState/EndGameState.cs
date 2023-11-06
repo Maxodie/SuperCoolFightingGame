@@ -14,12 +14,13 @@ namespace SuperCoolFightingGame
         ButtonGUI restartBtn;
         SpriteAnimation btnAnim;
 
-        MusicManager musicManager;
+        AudioListener backMusic;
+        SpriteAnimation selectedCharacterAnim;
 
-        public EndGameState(GameStateData data, Character winner, bool isPlayerWin, MusicManager musicManager) : base(data){ 
+        public EndGameState(GameStateData data, Character winner, bool isPlayerWin, AudioListener backMusic) : base(data){ 
             this.winner = winner;
             this.isPlayerWin = isPlayerWin;
-            this.musicManager = musicManager;
+            this.backMusic = backMusic;
         }
 
         public override void InitGUI() {
@@ -32,9 +33,6 @@ namespace SuperCoolFightingGame
             titleText = new Text(Color.White, textPos, result, gameE.fonts["Pixel40"]);
             gameE.AddTextToRender(titleText);
 
-            infosText = new Text(Color.White, new Vector2(320, 300), $"Winner : {winner.Name}", gameE.fonts["Pixel16"]);
-            gameE.AddTextToRender(infosText);
-
             Image scrollStartOpen = imageLoader.GetImage("scrollExitOpen");
 
             restartBtn = new ButtonGUI(new Vector2(184, 496), new Size(448, 96), "", gameE.fonts["Pixel40"], new Rectangle(0, 0, 448, 96), scrollStartOpen, scrollStartOpen, scrollStartOpen, false);
@@ -46,12 +44,22 @@ namespace SuperCoolFightingGame
             btnAnim = new SpriteAnimation(window, restartBtn.btnSprite, new Rectangle(0, 0, 10752, 96), 24, 1f, 0.2f);
             btnAnim.Play();
 
+            //Image selected character
+            Sprite selectedCharacter = new Sprite(imageLoader.GetImage(winner.characterIdleImgPath), new Rectangle(0, 0, 128, 128), new Vector2(336, 256));
+
+            gameE.AddSpriteToRender(selectedCharacter);
+            selectedCharacterAnim = new SpriteAnimation(WindowE.instance, selectedCharacter, new Rectangle(0, 0, 512, 128), 4, 1f, 1.5f, true);
+            selectedCharacterAnim.Play();
+
+            Sprite shadow = new Sprite(imageLoader.GetImage("shadow"), new Rectangle(0, 0, 128, 40), new Vector2(326, 360));
+            gameE.AddSpriteToRender(shadow);
         }
 
         public override void Update(float dt) {
             base.Update(dt);
 
             btnAnim.Update(dt);
+            selectedCharacterAnim.Update(dt);
         }
 
         void StartCaracterSelectorBtn() {
@@ -69,9 +77,6 @@ namespace SuperCoolFightingGame
 
         public override void OnStopRender() {
             base.OnStopRender();
-
-            musicManager.StopMusic();
-            musicManager = null;
         }
         void Restart() {
             while(superCoolFightingGame.states.Count > 2) {
@@ -79,6 +84,7 @@ namespace SuperCoolFightingGame
             }
 
             superCoolFightingGame.RemoveState(superCoolFightingGame.states[superCoolFightingGame.states.Count - 1]);
+            backMusic = null;
         }
     }
 }

@@ -66,8 +66,8 @@ namespace SuperCoolFightingGame
         Sprite defendStartSprite;
         Sprite defendEndSprite;
         Vector2 playerDefendEffectPos;
-        protected Vector2 projectilPlayerPos;
-        protected Vector2 projectilEnemyPos;
+        protected Vector2 projectilePlayerPos;
+        protected Vector2 projectileEnemyPos;
 
         WindowShaker windowDamageShaker;
 
@@ -157,12 +157,13 @@ namespace SuperCoolFightingGame
           CurrentDodgeRate = BaseDodgeRate;
         }
     
-        public virtual void Attack(Character target, bool forceAttack = false, bool doAnimation = true) {
+        public virtual void Attack(Character target, bool forceAttack = false, bool doAnimation = true, bool doText = true) {
             if (!forceAttack && CurrentOperation != Operation.Attack) return;
 
             // Return amount of damages
             int damage = target.TakeDamage(this);
-            gm.UpdateTextInfos($"{Name} uses Attack! {target.Name} \nloses {damage}HP.");
+            
+            if (doText) gm.UpdateTextInfos($"{Name} uses Attack! {target.Name} \nloses {damage}HP.");
 
             if (doAnimation) {
                 attackAnimEffect.Play();
@@ -307,8 +308,8 @@ namespace SuperCoolFightingGame
             this.playerDefendEffectPos = playerDefendEffectPos;
             this.enemyAttackEffectPos = enemyAttackEffectPos;
 
-            this.projectilPlayerPos = projectilePlayerPos;
-            this.projectilEnemyPos = projectileEnemyPos;
+            this.projectilePlayerPos = projectilePlayerPos;
+            this.projectileEnemyPos = projectileEnemyPos;
 
             //HUD
             playerHud = new PlayerHud(heartPos, 5, BaseHealth, attackPos, 2, BaseAttack, imageLoader, gameE, !isComputer, !isComputer, this);

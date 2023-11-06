@@ -17,13 +17,12 @@ namespace SuperCoolFightingGame
         ButtonGUI specialOperation;
 
         //Audio
-        MusicManager musicManager;
+        AudioListener backMusic;
              
-        public MainGameState(GameStateData data, GameManager gm, Character player, Character computer) : base(data) {
-            musicManager = new MusicManager("Media/sounds/game");
+        public MainGameState(GameStateData data, GameManager gm, Character player, Character computer, AudioListener backMusic) : base(data) {
+            this.backMusic = backMusic;
             operationSelector = new OperationSelector(data.difficulty);
             gameManager = gm;
-            gameManager.ReferenceMusicManager(musicManager);
             gameManager.player = player;
             gameManager.computer = computer;
         }

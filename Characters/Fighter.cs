@@ -28,8 +28,8 @@ namespace SuperCoolFightingGame
 
             //Projectile
             if (characterSpecialProjectileImgPath != "") {
-                projectile = new Sprite(imageLoader.GetImage(characterSpecialProjectileImgPath), new Rectangle(0, 0, 80, 64), projectilPlayerPos);
-                projectileDir = projectilEnemyPos - projectilPlayerPos;
+                projectile = new Sprite(imageLoader.GetImage(characterSpecialProjectileImgPath), new Rectangle(0, 0, 80, 64), projectilePlayerPos);
+                projectileDir = projectileEnemyPos - projectilePlayerPos;
 
                 if (playerSprite.flipX)
                     projectile.FlipX();
@@ -59,7 +59,7 @@ namespace SuperCoolFightingGame
             if (ispwepwe) {
                 projectile.Move(projectileDir * dt);
 
-                if (Vector2.Distance(projectile.pos, projectilEnemyPos) < 20) {
+                if (Vector2.Distance(projectile.pos, projectileEnemyPos) < 20) {
                     gameE.RemoveSpriteFromRender(projectile);
                     ispwepwe = false;
 
@@ -68,7 +68,7 @@ namespace SuperCoolFightingGame
 
                     explosionSound.Play();
 
-                    Attack(optionalTarget, true, false);
+                    Attack(optionalTarget, true, false, false);
                     CurrentAttack = BaseAttack;
                     _damageTaken = 0;
                 }
@@ -84,6 +84,8 @@ namespace SuperCoolFightingGame
             specialSelfEffect.Play();
             gameE.AddSpriteToRender(spriteSpecialSelfEffect);
             specialSound.Play();
+
+            gm.UpdateTextInfos($"{Name} is firing up!");
 
             currentActionTimeMs = (int)(specialSelfEffect.duration * 1000) + waitActionTimeOffset;
         }
@@ -107,19 +109,18 @@ namespace SuperCoolFightingGame
                 if (currentActionTimeMs < projectileTravelTimeMs)
                     currentActionTimeMs += projectileTravelTimeMs;
 
-                projectile.ChangePos(projectilPlayerPos);
+                projectile.ChangePos(projectilePlayerPos);
                 gameE.AddSpriteToRender(projectile);
                 ispwepwe = true;
 
                 projectileSound.Play();
             }
 
-            gm.UpdateTextInfos($"{Name} is firing up!");
-
             CurrentAttack = _damageTaken;
-            
 
             base.UseAbility(optionalTarget, false, playEnemyEffect);
+
+            gm.UpdateTextInfos($"{Name} exerts payback!\n{optionalTarget.Name} loses {CurrentAttack}HP.");
         }
 
     }

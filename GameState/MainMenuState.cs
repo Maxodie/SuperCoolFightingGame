@@ -13,7 +13,9 @@ namespace SuperCoolFightingGame
         //Audio
         AudioListener backMusic;
 
-        public MainMenuState(GameStateData gameStateData): base(gameStateData) { }
+        public MainMenuState(GameStateData gameStateData): base(gameStateData) {
+            backMusic = new AudioListener(true, "Media/sounds/mainMenu/Jeopardies.mp3", true);
+        }
 
         public override void InitGUI() {
             window.BackgroundImage = imageLoader.GetImage("background0");
@@ -42,7 +44,7 @@ namespace SuperCoolFightingGame
             {
                 gameStateData.savedAudio["click"] = new AudioListener(false, "Media/sounds/SFX/Click.wav", false);
             }
-            backMusic = new AudioListener(true, "Media/sounds/game/An.wav", true);
+            
             mainMenuManager = new MainMenuManager(gameStateData, backMusic);
             base.Start();
         }
@@ -63,6 +65,7 @@ namespace SuperCoolFightingGame
         public override void OnStopRender() {
             base.OnStopRender();
             mainMenuManager = null;
+            backMusic = null;
         }
 
         /// <summary>

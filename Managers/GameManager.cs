@@ -19,7 +19,7 @@ namespace SuperCoolFightingGame
 
         public Text currentGameInfoText;
 
-        public MusicManager musicManager;
+        public AudioListener backMusic;
         AudioListener defeatSound;
 
         public GameManager(Character player, Character computer, SuperCoolFightingGame mainState)
@@ -31,8 +31,8 @@ namespace SuperCoolFightingGame
             defeatSound = new AudioListener(false, "Media/sounds/SFX/Defeat.wav");
         }
 
-        public void ReferenceMusicManager(MusicManager musicManager) {
-            this.musicManager = musicManager;
+        public void ReferenceMusicManager(AudioListener backMusic) {
+            this.backMusic = backMusic;
         }
 
         public void MakeActions() {
@@ -116,7 +116,7 @@ namespace SuperCoolFightingGame
 
             await Task.Run(() => { Task.Delay((int)(winner.animator.GetAnimation("Death").duration * 1000) + winner.waitActionTimeOffset).Wait(); });
 
-            mainState.AddState(new EndGameState(mainState.gameStateData, winner, !winner.isComputer, musicManager));
+            mainState.AddState(new EndGameState(mainState.gameStateData, winner, !winner.isComputer, backMusic));
             if(winner.isComputer)
                 computer = null;
             else

@@ -82,7 +82,7 @@ namespace SuperCoolFightingGame
                 SelectCharacter(sender, e, buttonTank, tankIcon, new Vector2(608, 448), new Vector2(584, 424), typeof(Tank)); 
             };
 
-            charactersInfosText = new Text(Color.White, new Vector2(48, 250), "Character :\nnot selected", gameE.fonts["Pixel16"]);
+            charactersInfosText = new Text(Color.White, new Vector2(48, 380), "Select a Character", gameE.fonts["Pixel16"]);
             gameE.AddTextToRender(charactersInfosText);
         }
 
@@ -122,9 +122,8 @@ namespace SuperCoolFightingGame
         }
 
         void StartMainGame() {
-            backMusic.Stop();
+            superCoolFightingGame.AddState(new MainGameState(gameStateData, gameManager, player, computer, backMusic));
             backMusic = null;
-            superCoolFightingGame.AddState(new MainGameState(gameStateData, gameManager, player, computer));
             player = null;
             computer = null;
         }
@@ -170,7 +169,8 @@ namespace SuperCoolFightingGame
             currentIcon.ChangeImages(newImage, newImage, newImage, new Rectangle(0, 0, 120, 120));
 
             CharacterStats characterData = characterSelector.characterDatabase.GetCharacterDataWithType(characterType);
-            charactersInfosText.text = $"Character :\nName : {characterData.Name}\nLife : {characterData.BaseHealth}\nAttack Point : {characterData.BaseAttack}";
+            charactersInfosText.ChangePos(new Vector2(48, 250));
+            charactersInfosText.text = $"{characterData.Name}\n\nHP : {characterData.BaseHealth}\nAP : {characterData.BaseAttack}";
 
             if (startBtn == null) {
 
