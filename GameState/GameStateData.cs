@@ -12,7 +12,7 @@ namespace SuperCoolFightingGame
         public WindowE window;
         public GameE gameE;
         public SuperCoolFightingGame superCoolFightingGame;
-        public Dictionary<string, Sprite> savedSprite;
+        public Dictionary<string, AudioListener> savedAudio;
         public ImageLoader imageLoader;
 
         //mainGameInfos

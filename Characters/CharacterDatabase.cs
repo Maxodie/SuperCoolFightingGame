@@ -1,5 +1,4 @@
 using System;
-using System.Drawing;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
@@ -52,8 +51,8 @@ namespace SuperCoolFightingGame
         "vladIdle",
         "vladDeath",
         "vladDamaged",
-        "vladSpecial",//
-        "fighterIcon",//
+        "vladSpecial",
+        "fighterIcon",
         "fighterClassIcon",
         "attackAnimation",
         "defendAnimationStart",

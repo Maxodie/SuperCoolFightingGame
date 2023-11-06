@@ -30,7 +30,8 @@ namespace SuperCoolFightingGame
 
 
         public override void InitGUI() {
-            gameE.AddSpriteToRender(gameStateData.savedSprite["border"]);
+            Sprite border = new Sprite(imageLoader.GetImage("border"), new Rectangle(0, 0, 800, 640), new Vector2(0, 0));
+            gameE.AddSpriteToRender(border);
 
             Image attackImageBtn = imageLoader.GetImage("attack");
             Image attackImageHighlightBtn = imageLoader.GetImage("attackH");
@@ -60,6 +61,8 @@ namespace SuperCoolFightingGame
             //Dialog scroll
             Sprite dialogScroll = new Sprite(imageLoader.GetImage("scroll"), new Rectangle(0, 0, 448, 96), new Vector2(336, 384));
             gameE.AddSpriteToRender(dialogScroll);
+
+
         }
 
         /// <summary>
@@ -94,7 +97,7 @@ namespace SuperCoolFightingGame
         /// </summary>
         public override void OnStopRender() {
             base.OnStopRender();
-
+            gameManager = null;
         }
 
         /// <summary>

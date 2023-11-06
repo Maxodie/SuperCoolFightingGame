@@ -11,11 +11,12 @@ namespace SuperCoolFightingGame
         protected GameE gameE;
         protected GameManager gm;
 
-        protected PlayerHud playerHud;
+        public PlayerHud playerHud { get; protected set; }
 
         public Sprite playerSprite;
+        Sprite shadow;
         bool isFliped;
-        protected const int waitActionTimeOfset = 500;
+        public int waitActionTimeOffset = 500;
         public bool isComputer { get; private set; }
 
         Sprite SpriteEnemyEffect;
@@ -41,7 +42,7 @@ namespace SuperCoolFightingGame
         public string characterSpecialBtnPressedImgPath;
         public string characterSpecialSelfImgPath;
         public string characterSpecialSelfEffectImgPath;
-        public string characterSpecialProjectilImgPath;
+        public string characterSpecialProjectileImgPath;
         public string characterSpecialEnemyImgPath;
         public string characterIdleImgPath;
         public string characterDeathImgPath;
@@ -68,8 +69,16 @@ namespace SuperCoolFightingGame
         protected Vector2 projectilPlayerPos;
         protected Vector2 projectilEnemyPos;
 
-        protected Animator animator;
+        WindowShaker windowDamageShaker;
+
+        public Animator animator { get; private set; }
         public int currentActionTimeMs = 0;
+
+        //Sounds
+        AudioListener attackSound;
+        AudioListener defendStartSound;
+        AudioListener defendEndSound;
+        protected AudioListener specialSound;
 
         #endregion
 
@@ -84,7 +93,7 @@ namespace SuperCoolFightingGame
             characterSpecialBtnPressedImgPath = data.characterSpecialBtnPressedImgPath;
             characterSpecialSelfImgPath = data.characterSpecialSelfImgPath;
             characterSpecialSelfEffectImgPath = data.characterSpecialSelfEffectImgPath;
-            characterSpecialProjectilImgPath = data.characterSpecialProjectilImgPath;
+            characterSpecialProjectileImgPath = data.characterSpecialProjectileImgPath;
             characterSpecialEnemyImgPath = data.characterSpecialEnemyImgPath;
             characterIdleImgPath = data.characterIdleImgPath;
             characterDeathImgPath = data.characterDeathImgPath;
@@ -99,21 +108,32 @@ namespace SuperCoolFightingGame
             this.isComputer = isComputer;
             this.gm = gm;
 
+            this.windowDamageShaker = new WindowShaker(WindowE.instance);
             InitCharacter();
         }
 
         public virtual void InitAnimations(ImageLoader imageLoader) {
+            this.attackSound = new AudioListener(false, "Media/sounds/SFX/Attack.wav");
+            this.defendStartSound = new AudioListener(false, "Media/sounds/SFX/DefendStart.wav");
+            this.defendEndSound = new AudioListener(false, "Media/sounds/SFX/DefendEnd.wav");
+
             //Character Animator
             animator = new Animator(WindowE.instance, playerSprite);
 
             animator.AddAnimation(imageLoader.GetImage(characterIdleImgPath), new Rectangle(0, 0, 128, 128), new Rectangle(0, 0, 512, 128), 4, 1f, 1.5f, "Idle", true, true);
 
-            animator.AddAnimation(imageLoader.GetImage(characterIdleImgPath), new Rectangle(0, 0, 128, 128), new Rectangle(0, 0, 2176, 128), 17, 1f, .5f, "Death");
+            animator.AddAnimation(imageLoader.GetImage(characterDeathImgPath), new Rectangle(0, 0, 128, 128), new Rectangle(0, 0, 2176, 128), 17, 1f, 1f, "Death", false, false, false);
+
+            animator.AddOnEndAnimation(delegate (object sender, EventArgs e) { gameE.RemoveSpriteFromRender(shadow); }, "Death");
 
             //Defend effect
             defendStartSprite = new Sprite(imageLoader.GetImage(defenseStartEffect), new Rectangle(0, 0, 152, 152), playerDefendEffectPos);
+            if (!isFliped)
+                defendStartSprite.FlipX();
             defendStartAnimEffect = new SpriteAnimation(WindowE.instance, defendStartSprite, new Rectangle(0, 0, 2432, 152), 16, 1f, 1f);
             defendEndSprite = new Sprite(imageLoader.GetImage(defenseEndEffect), new Rectangle(0, 0, 152, 152), playerDefendEffectPos);
+            if (!isFliped)
+                defendEndSprite.FlipX();
             defendEndAnimEffect = new SpriteAnimation(WindowE.instance, defendEndSprite, new Rectangle(0, 0, 1520, 152), 10, 1f, 1f);
 
             animator.AddAnimation(imageLoader.GetImage(characterDamagedPath), new Rectangle(0, 0, 128, 128), new Rectangle(0, 0, 2176, 128), 17, 1f, 0.5f, "Damaged");
@@ -142,14 +162,15 @@ namespace SuperCoolFightingGame
 
             // Return amount of damages
             int damage = target.TakeDamage(this);
-            gm.UpdateTextInfos($"{Name} attacks {target.Name} who\nloses {damage}Hp");
+            gm.UpdateTextInfos($"{Name} uses Attack! {target.Name} \nloses {damage}HP.");
 
             if (doAnimation) {
                 attackAnimEffect.Play();
                 gameE.AddSpriteToRender(SpriteEnemyEffect);
+                attackSound.Play();
             }
             
-            currentActionTimeMs = (int)(attackAnimEffect.duration * 1000) + waitActionTimeOfset;
+            currentActionTimeMs = (int)(attackAnimEffect.duration * 1000) + waitActionTimeOffset;
         }
 
 
@@ -160,6 +181,10 @@ namespace SuperCoolFightingGame
             defendEndAnimEffect.Update(dt);
             specialSelfEffect.Update(dt);
             specialEnemyEffect?.Update(dt);
+
+            windowDamageShaker.Update(dt);
+
+            playerHud.Update(dt);
         }
     
         public virtual int TakeDamage(Character attacker)
@@ -176,6 +201,7 @@ namespace SuperCoolFightingGame
             if (damage > 0) {
                 animator.PlayAnimation("Damaged");
                 RemoveHp(damage, attacker);
+                windowDamageShaker.cameraShaker(0.2f, 10);
             }
 
             return damage;
@@ -194,13 +220,19 @@ namespace SuperCoolFightingGame
             {
                 if(attacker == null) {
                     if(isComputer)
-                        gm.GameOver(gm.player);
+                        Death(gm.player);
                     else
-                        gm.GameOver(gm.computer);
+                        Death(gm.computer);
                 }
                 else
-                    gm.GameOver(attacker);
+                    Death(attacker);
             }
+        }
+
+        void Death(Character winner) {
+            EndActions();
+            animator.PlayAnimation("Death");
+            gm.GameOver(winner);
         }
 
         public void EndActions() {
@@ -208,6 +240,8 @@ namespace SuperCoolFightingGame
                 gameE.AddSpriteToRender(defendEndSprite);
                 gameE.RemoveSpriteFromRender(defendStartSprite);
                 defendEndAnimEffect.Play();
+                defendEndSound.Play();
+                currentActionTimeMs = (int)(defendEndAnimEffect.duration * 1000) + waitActionTimeOffset;
             }
         }
 
@@ -219,42 +253,48 @@ namespace SuperCoolFightingGame
         public void StartDefense() {
             if (CurrentOperation != Operation.Defend) return;
 
-            gm.UpdateTextInfos($"{Name} active his shield");
+            gm.UpdateTextInfos($"{Name} uses Defend!");
 
             defendStartAnimEffect.Play();
             gameE.AddSpriteToRender(defendStartSprite);
+            defendStartSound.Play();
 
-            currentActionTimeMs = (int)(defendStartAnimEffect.duration * 1000) + 1 + waitActionTimeOfset;
+            currentActionTimeMs = (int)(defendStartAnimEffect.duration * 1000) + 1 + waitActionTimeOffset;
         }
 
-        public virtual void UseAbility(Character optionalTarget = null)
+        public virtual void StartAbility() {
+            //if (CurrentOperation != Operation.Special) return;
+        }
+
+        public virtual void UseAbility(Character optionalTarget = null, bool playSelfEffect = true, bool playEnemyEffect = true)
         {
             if (CurrentOperation != Operation.Special) return;
 
-            if (spriteSpecialSelfEffect != null) {
+            if (playSelfEffect && spriteSpecialSelfEffect != null) {
                 gameE.AddSpriteToRender(spriteSpecialSelfEffect);
                 specialSelfEffect.Play();
-
+                currentActionTimeMs += (int)(specialSelfEffect?.duration * 1000);
+                specialSound.Play();
             }
 
-            if (spriteSpecialEnemyEffect != null) {
+            if (playEnemyEffect && spriteSpecialEnemyEffect != null) {
                 gameE.AddSpriteToRender(spriteSpecialEnemyEffect);
                 specialEnemyEffect.Play();
-
+                currentActionTimeMs += (int)(specialEnemyEffect?.duration * 1000);
             }
 
-            currentActionTimeMs = (int)((specialSelfEffect?.duration + specialSelfEffect?.duration) * 1000) + 1 + waitActionTimeOfset;
+            currentActionTimeMs += waitActionTimeOffset;
         }
 
 
         public virtual int GetSpecialData() { return 0; }
 
         public virtual void LoadCharacter(ImageLoader imageLoader, GameE gameE, Vector2 pos, Vector2 shadowPos, bool flipX, Vector2 playerDefendEffectPos, Vector2 enemyAttackEffectPos,
-            Vector2 projectilPlayerPos, Vector2 projectilEnemyPos, Vector2 heartPos, Vector2 attackPos) {
+            Vector2 projectilePlayerPos, Vector2 projectileEnemyPos, Vector2 heartPos, Vector2 attackPos) {
 
             this.gameE = gameE;
             this.isFliped = flipX;
-            Sprite shadow = new Sprite(imageLoader.GetImage("shadow"), new Rectangle(0, 0, 128, 40), shadowPos);
+            shadow = new Sprite(imageLoader.GetImage("shadow"), new Rectangle(0, 0, 128, 40), shadowPos);
             gameE.AddSpriteToRender(shadow);
 
             playerSprite = new Sprite(imageLoader.GetImage(characterIdleImgPath), new Rectangle(0, 0, 128, 128), pos);
@@ -267,8 +307,8 @@ namespace SuperCoolFightingGame
             this.playerDefendEffectPos = playerDefendEffectPos;
             this.enemyAttackEffectPos = enemyAttackEffectPos;
 
-            this.projectilPlayerPos = projectilPlayerPos;
-            this.projectilEnemyPos = projectilEnemyPos;
+            this.projectilPlayerPos = projectilePlayerPos;
+            this.projectilEnemyPos = projectileEnemyPos;
 
             //HUD
             playerHud = new PlayerHud(heartPos, 5, BaseHealth, attackPos, 2, BaseAttack, imageLoader, gameE, !isComputer, !isComputer, this);

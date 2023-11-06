@@ -13,6 +13,8 @@ namespace SuperCoolFightingGame
         public override void InitAnimations(ImageLoader imageLoader) {
             base.InitAnimations(imageLoader);
 
+            specialSound = new AudioListener(false, "Media/sounds/SFX/LunaSpecial.wav");
+
             specialSelfEffectPos = !isComputer ? new Vector2(96, 176) : new Vector2(536, 120);
 
             spriteSpecialSelfEffect = new Sprite(imageLoader.GetImage(characterSpecialSelfEffectImgPath), new Rectangle(0, 0, 160, 200), specialSelfEffectPos);
@@ -23,7 +25,7 @@ namespace SuperCoolFightingGame
 
         }
 
-        public override void UseAbility(Character optionalTarget = null) {
+        public override void UseAbility(Character optionalTarget = null, bool playSelfEffect = true, bool playEnemyEffect = true) {
             if (CurrentOperation != Operation.Special) return;
 
             animator.PlayAnimation("HealerSpe");
@@ -33,14 +35,16 @@ namespace SuperCoolFightingGame
             if (CurrentHealth + currentHeal > BaseHealth)
                 currentHeal = BaseHealth - CurrentHealth;
 
-            gm.UpdateTextInfos($"{Name} use her power to\n heal herself by {currentHeal} hp");
+            gm.UpdateTextInfos($"{Name} calls upon the \nstars and heals {currentHeal}HP!");
             CurrentHealth += currentHeal;
 
             for(int i=0; i < currentHeal; i++) {
                 playerHud.GetHp();
             }
 
-            base.UseAbility();
+            specialSound.Play();
+
+            base.UseAbility(optionalTarget, playSelfEffect, playEnemyEffect);
         }
     }
 }

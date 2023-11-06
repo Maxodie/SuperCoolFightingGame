@@ -20,12 +20,15 @@ namespace SuperCoolFightingGame
         public Text currentGameInfoText;
 
         public MusicManager musicManager;
+        AudioListener defeatSound;
 
         public GameManager(Character player, Character computer, SuperCoolFightingGame mainState)
         {
             this.player = player;
             this.computer = computer;
             this.mainState = mainState;
+
+            defeatSound = new AudioListener(false, "Media/sounds/SFX/Defeat.wav");
         }
 
         public void ReferenceMusicManager(MusicManager musicManager) {
@@ -35,15 +38,36 @@ namespace SuperCoolFightingGame
         public void MakeActions() {
             if (!canPlay) return;
 
+            if(player.GetType() == typeof(Assassin)) actionsQueue.Enqueue((player.StartAbility, player));
+            if(computer.GetType() == typeof(Assassin)) actionsQueue.Enqueue((computer.StartAbility, computer));
+
+            if (player.GetType() == typeof(Fighter)) actionsQueue.Enqueue((player.StartAbility, player));
+            if (computer.GetType() == typeof(Fighter)) actionsQueue.Enqueue((computer.StartAbility, computer));
+
+            if(player.GetType() == typeof(Healer) || player.GetType() == typeof(Tank))
+                actionsQueue.Enqueue((player.StartAbility, player));
+            if(computer.GetType() == typeof(Healer) || computer.GetType() == typeof(Tank))
+                actionsQueue.Enqueue((computer.StartAbility, computer));
+
             actionsQueue.Enqueue((player.StartDefense, player));
             actionsQueue.Enqueue((computer.StartDefense, computer));
+
+            if (player.GetType() == typeof(Tank)) actionsQueue.Enqueue((delegate () { player.UseAbility(computer); }, player));
+            if (computer.GetType() == typeof(Tank)) actionsQueue.Enqueue((delegate () { computer.UseAbility(player); }, computer));
+
+            if (player.GetType() == typeof(Healer)) actionsQueue.Enqueue((delegate () { player.UseAbility(computer); }, player));
+            if (computer.GetType() == typeof(Healer)) actionsQueue.Enqueue((delegate () { computer.UseAbility(player); }, computer));
 
             actionsQueue.Enqueue((delegate () { player.Attack(computer); }, player));
             actionsQueue.Enqueue((delegate () { computer.Attack(player); }, computer));
 
-            actionsQueue.Enqueue((delegate () { player.UseAbility(computer); }, player));
+            if (player.GetType() == typeof(Assassin)) actionsQueue.Enqueue((delegate () { player.UseAbility(computer); }, player));
+            if (computer.GetType() == typeof(Assassin)) actionsQueue.Enqueue((delegate () { computer.UseAbility(player); }, computer));
+
+            if (player.GetType() == typeof(Fighter)) actionsQueue.Enqueue((delegate () { player.UseAbility(computer); }, player));
+            if (computer.GetType() == typeof(Fighter)) actionsQueue.Enqueue((delegate () { computer.UseAbility(player); }, computer));
+
             actionsQueue.Enqueue((player.EndActions, player));
-            actionsQueue.Enqueue((delegate () { computer.UseAbility(player); }, computer));
             actionsQueue.Enqueue((computer.EndActions, computer));
 
 
@@ -86,9 +110,17 @@ namespace SuperCoolFightingGame
             isFinished = true;
             canPlay = false;
 
-            await Task.Run(() => { Task.Delay(2000).Wait(); });
+            player.playerHud.CloseCharacterBorder();
 
-            mainState.AddState(new EndGameState(mainState.gameStateData, winner, !winner.isComputer, musicManager));   
+            defeatSound.Play();
+
+            await Task.Run(() => { Task.Delay((int)(winner.animator.GetAnimation("Death").duration * 1000) + winner.waitActionTimeOffset).Wait(); });
+
+            mainState.AddState(new EndGameState(mainState.gameStateData, winner, !winner.isComputer, musicManager));
+            if(winner.isComputer)
+                computer = null;
+            else
+                player = null;
         }
 
         //4

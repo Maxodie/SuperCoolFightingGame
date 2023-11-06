@@ -23,7 +23,8 @@ namespace SuperCoolFightingGame
         }
 
         public override void InitGUI() {
-            gameE.AddSpriteToRender(gameStateData.savedSprite["border"]);
+            Sprite border = new Sprite(imageLoader.GetImage("border"), new Rectangle(0, 0, 800, 640), new Vector2(0, 0));
+            gameE.AddSpriteToRender(border);
 
             string result = isPlayerWin ? "WIN" : "LOOSE";
             Vector2 textPos = isPlayerWin ? new Vector2(320, 50) : new Vector2(300, 50);
@@ -37,10 +38,14 @@ namespace SuperCoolFightingGame
             Image scrollStartOpen = imageLoader.GetImage("scrollExitOpen");
 
             restartBtn = new ButtonGUI(new Vector2(184, 496), new Size(448, 96), "", gameE.fonts["Pixel40"], new Rectangle(0, 0, 448, 96), scrollStartOpen, scrollStartOpen, scrollStartOpen, false);
-            restartBtn.onClick += StartCaracterSelectorBtn;
+            restartBtn.onClick += delegate (object sender, EventArgs e) {
+                gameStateData.savedAudio["click"].Play();
+                StartCaracterSelectorBtn(); 
+            };
 
             btnAnim = new SpriteAnimation(window, restartBtn.btnSprite, new Rectangle(0, 0, 10752, 96), 24, 1f, 0.2f);
             btnAnim.Play();
+
         }
 
         public override void Update(float dt) {
@@ -49,7 +54,7 @@ namespace SuperCoolFightingGame
             btnAnim.Update(dt);
         }
 
-        void StartCaracterSelectorBtn(object sender, EventArgs e) {
+        void StartCaracterSelectorBtn() {
             if (!btnAnim.isPaused) return;
 
             Image scrollStartClose = imageLoader.GetImage("scrollExitClose");
@@ -66,6 +71,7 @@ namespace SuperCoolFightingGame
             base.OnStopRender();
 
             musicManager.StopMusic();
+            musicManager = null;
         }
         void Restart() {
             while(superCoolFightingGame.states.Count > 2) {

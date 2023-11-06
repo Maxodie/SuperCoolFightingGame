@@ -17,7 +17,7 @@ namespace SuperCoolFightingGame
             gameStateData.gameE = this;
             gameStateData.superCoolFightingGame = this;
             gameStateData.imageLoader = new ImageLoader();
-            gameStateData.savedSprite = new Dictionary<string, Sprite>();
+            gameStateData.savedAudio = new Dictionary<string, AudioListener>();
         }
 
         /// <summary>
@@ -72,12 +72,13 @@ namespace SuperCoolFightingGame
         /// <param name="state"></param>
         /// <param name="playStart"></param>
         public void RemoveState(GameState state, bool playStart = true) {
-            window.ResetRender();
-
             state.OnStopRender();
             state.OnDestroy();
 
             states.Remove(state);
+
+            window.ResetRender();
+
             if (states.Count > 0)
                 states[states.Count - 1].Start();
             window.Update();

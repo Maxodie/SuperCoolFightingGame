@@ -25,21 +25,27 @@ namespace SuperCoolFightingGame
 
             //Start Button
             startButton = new ButtonGUI(new Vector2(184, 296), new Size(448, 96), "", gameData.fonts["Pixel40"], new Rectangle(0, 0, 448, 96), scrollStartOpen, scrollStartOpen, scrollStartOpen, false);
-            startButton.onClick += StartGame;
+            startButton.onClick += delegate (object sender, EventArgs e) { 
+                gameData.savedAudio["click"].Play();
+                StartGame(); 
+            };
 
             startBtnAnim = new SpriteAnimation(gameData.window, startButton.btnSprite, new Rectangle(0, 0, 10752, 96), 24, 1f, 1f);
             startBtnAnim.Play();
 
             //QuitButton00
             quitButton = new ButtonGUI(new Vector2(184, 408), new Size(448, 96), "", gameData.fonts["Pixel40"], new Rectangle(0, 0, 448, 96), scrollExitOpen, scrollExitOpen, scrollExitOpen, false);
-            quitButton.onClick += QuitGame;
+            quitButton.onClick += delegate (object sender, EventArgs e) {
+                gameData.savedAudio["click"].Play();
+                QuitGame();
+            };
 
             closeBtnAnim = new SpriteAnimation(gameData.window, quitButton.btnSprite, new Rectangle(0, 0, 10752, 96), 24, 1f, 2f);
             closeBtnAnim.Play();
         }
 
         //Start button
-        void StartGame(object sender, EventArgs e) {
+        void StartGame() {
             if (!startBtnAnim.isPaused) return;
 
             Image scrollStartClose = gameData.imageLoader.GetImage("scrollPlayClose");
@@ -63,7 +69,7 @@ namespace SuperCoolFightingGame
         }
 
         //Quit button
-        void QuitGame(object sender, EventArgs e) {
+        void QuitGame() {
             if (!closeBtnAnim.isPaused) return;
 
             Image scrollExitClose = gameData.imageLoader.GetImage("scrollExitClose");

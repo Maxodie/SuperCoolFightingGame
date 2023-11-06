@@ -12,6 +12,8 @@ namespace SuperCoolFightingGame
         public override void InitAnimations(ImageLoader imageLoader) {
             base.InitAnimations(imageLoader);
 
+            specialSound = new AudioListener(false, "Media/sounds/SFX/NanSpecial.wav");
+
             specialSelfEffectPos = !isComputer ? new Vector2(88, 200) : new Vector2(544, 144);
 
             spriteSpecialSelfEffect = new Sprite(imageLoader.GetImage(characterSpecialSelfEffectImgPath), new Rectangle(0, 0, 160, 176), specialSelfEffectPos);
@@ -19,12 +21,13 @@ namespace SuperCoolFightingGame
             specialSelfEffect.onEndAnimation += delegate (object sender, EventArgs e) { gameE.RemoveSpriteFromRender(spriteSpecialSelfEffect); };
 
             animator.AddAnimation(imageLoader.GetImage(characterSpecialSelfImgPath), new Rectangle(0, 0, 128, 128), new Rectangle(0, 0, 2560, 128), 20, 1f, .5f, "TankSpe");
+            animator.AddOnEndAnimation(delegate (object sender, EventArgs e) {  }, "TankSpe");
         }
 
-        public async override void UseAbility(Character optionalTarget = null)
+        public async override void UseAbility(Character optionalTarget = null, bool playSelfEffect = true, bool playEnemyEffect = true)
         {
 
-            base.UseAbility();
+            base.UseAbility(optionalTarget, playSelfEffect);
 
             if (CurrentOperation != Operation.Special) return;
 
@@ -33,7 +36,7 @@ namespace SuperCoolFightingGame
                 return;
             }
             
-            gm.UpdateTextInfos($"{Name} use her power\nand get 1 AP");
+            gm.UpdateTextInfos($"{Name} draws power from \nher blood, gaining 1AP!");
 
             animator.PlayAnimation("TankSpe");
       
@@ -42,12 +45,14 @@ namespace SuperCoolFightingGame
             playerHud.GetAttackPoint();
             RemoveHp(1);
             //Console.WriteLine($"{Name} utilise sa capacité ! Il inflige {Attack(optionalTarget)} pt de dégats à {optionalTarget.Name} et perd 1 pt de vie.");
-                
-                
-            await Task.Run(() => { Task.Delay((int)(specialSelfEffect.duration * 1000) + waitActionTimeOfset).Wait();});
+
+            specialSound.Play();
+
+            currentActionTimeMs += (int)(attackAnimEffect.duration * 1000) * 2 + waitActionTimeOffset;
+            await Task.Run(() => { Task.Delay((int)(specialSelfEffect.duration * 1000)).Wait();});
 
 
-            Attack(optionalTarget, true);
+            Attack(optionalTarget, playSelfEffect, playEnemyEffect);
 
             CurrentAttack--;
             playerHud.LoseAttackPoint();

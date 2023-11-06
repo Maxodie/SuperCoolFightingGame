@@ -27,6 +27,8 @@ namespace SuperCoolFightingGame
         SpriteAnimation spriteStartButtonAnimation;
 
         Sprite selectorBorder;
+        Sprite selectedCharacter;
+        SpriteAnimation selectedCharacterAnim;
 
         Text charactersInfosText;
 
@@ -43,7 +45,8 @@ namespace SuperCoolFightingGame
         {
             base.InitGUI();
 
-            gameE.AddSpriteToRender(gameStateData.savedSprite["border"]);
+            Sprite border = new Sprite(imageLoader.GetImage("border"), new Rectangle(0, 0, 800, 640), new Vector2(0, 0));
+            gameE.AddSpriteToRender(border);
 
             Image assassinFace = imageLoader.GetImage("assassinFace");
             Image enchanterFace = imageLoader.GetImage("enchanterFace");
@@ -56,16 +59,28 @@ namespace SuperCoolFightingGame
             Image tankIcon = imageLoader.GetImage("tankIcon");
 
             buttonAssassin = new ButtonGUI(new Vector2(48, 424), new Size(168, 168), "", gameE.fonts["Pixel40"], new Rectangle(0, 0, 168, 168), assassinFace, assassinFace, assassinFace, false);
-            buttonAssassin.onClick += delegate (object sender, EventArgs e) { SelectCharacter(sender, e, buttonAssassin, assassinIcon, new Vector2(72, 448), new Vector2(48, 424), typeof(Assassin)); };
+            buttonAssassin.onClick += delegate (object sender, EventArgs e) {
+                gameStateData.savedAudio["click"].Play();
+                SelectCharacter(sender, e, buttonAssassin, assassinIcon, new Vector2(72, 448), new Vector2(48, 424), typeof(Assassin)); 
+            };
 
             buttonFighter = new ButtonGUI(new Vector2(224, 424), new Size(168, 168), "", gameE.fonts["Pixel40"], new Rectangle(0, 0, 168, 168), fighterFace, fighterFace, fighterFace, false);
-            buttonFighter.onClick += delegate (object sender, EventArgs e) { SelectCharacter(sender, e, buttonFighter, fighterIcon, new Vector2(248, 448), new Vector2(224, 424), typeof(Fighter)); };
+            buttonFighter.onClick += delegate (object sender, EventArgs e) {
+                gameStateData.savedAudio["click"].Play();
+                SelectCharacter(sender, e, buttonFighter, fighterIcon, new Vector2(248, 448), new Vector2(224, 424), typeof(Fighter)); 
+            };
 
             buttonHealer = new ButtonGUI(new Vector2(408, 424), new Size(168, 168), "", gameE.fonts["Pixel40"], new Rectangle(0, 0, 168, 168), enchanterFace, enchanterFace, enchanterFace, false);
-            buttonHealer.onClick += delegate (object sender, EventArgs e) { SelectCharacter(sender, e, buttonHealer, enchanterIcon, new Vector2(432, 448), new Vector2(408, 424), typeof(Healer)); };
+            buttonHealer.onClick += delegate (object sender, EventArgs e) {
+                gameStateData.savedAudio["click"].Play();
+                SelectCharacter(sender, e, buttonHealer, enchanterIcon, new Vector2(432, 448), new Vector2(408, 424), typeof(Healer));
+            };
 
             buttonTank = new ButtonGUI(new Vector2(584, 424), new Size(168, 168), "", gameE.fonts["Pixel40"], new Rectangle(0, 0, 168, 168), tankFace, tankFace, tankFace, false);
-            buttonTank.onClick += delegate (object sender, EventArgs e) { SelectCharacter(sender, e, buttonTank, tankIcon, new Vector2(608, 448), new Vector2(584, 424), typeof(Tank)); };
+            buttonTank.onClick += delegate (object sender, EventArgs e) {
+                gameStateData.savedAudio["click"].Play();
+                SelectCharacter(sender, e, buttonTank, tankIcon, new Vector2(608, 448), new Vector2(584, 424), typeof(Tank)); 
+            };
 
             charactersInfosText = new Text(Color.White, new Vector2(48, 250), "Character :\nnot selected", gameE.fonts["Pixel16"]);
             gameE.AddTextToRender(charactersInfosText);
@@ -88,6 +103,7 @@ namespace SuperCoolFightingGame
             base.Update(dt);
 
             spriteStartButtonAnimation?.Update(dt);
+            selectedCharacterAnim?.Update(dt);
         }
 
         /// <summary>
@@ -107,10 +123,13 @@ namespace SuperCoolFightingGame
 
         void StartMainGame() {
             backMusic.Stop();
+            backMusic = null;
             superCoolFightingGame.AddState(new MainGameState(gameStateData, gameManager, player, computer));
+            player = null;
+            computer = null;
         }
 
-        void ConfirmSelection(object sender, EventArgs e) {
+        void ConfirmSelection() {
             if (!spriteStartButtonAnimation.isPaused) return;
 
             ConfirmCharacterSelection();
@@ -129,7 +148,9 @@ namespace SuperCoolFightingGame
             characterSelector.Select(characterType);
 
             if (selectorBorder == null) {
-                selectorBorder = gameStateData.savedSprite["selectBorder"];
+                selectorBorder = new Sprite(imageLoader.GetImage("selectBorder"), new Rectangle(0, 0, 168, 168), pos);
+                superCoolFightingGame.AddSpriteToRender(selectorBorder);
+
                 selectorBorder.ChangePos(pos);
                 superCoolFightingGame.AddSpriteToRender(selectorBorder);
             }
@@ -157,11 +178,25 @@ namespace SuperCoolFightingGame
 
                 //Start Button
                 startBtn = new ButtonGUI(new Vector2(176, 56), new Size(448, 96), "", superCoolFightingGame.fonts["Pixel40"], new Rectangle(0, 0, 448, 96), scrollStartOpen, scrollStartOpen, scrollStartOpen, false);
-                startBtn.onClick += ConfirmSelection;
+                startBtn.onClick += delegate(object o, EventArgs ev) {
+                    gameStateData.savedAudio["click"].Play();
+                    ConfirmSelection(); 
+                };
 
                 spriteStartButtonAnimation = new SpriteAnimation(window, startBtn.btnSprite, new Rectangle(0, 0, 10752, 96), 24, 1f, 0.2f);
                 spriteStartButtonAnimation.Play();
+
+                Sprite shadow = new Sprite(imageLoader.GetImage("shadow"), new Rectangle(0, 0, 128, 40), new Vector2(326, 360));
+                gameE.AddSpriteToRender(shadow);
             }
+
+            //Image selected character
+            gameE.RemoveSpriteFromRender(selectedCharacter);
+            selectedCharacter = new Sprite(imageLoader.GetImage(characterData.characterIdleImgPath), new Rectangle(0, 0, 128, 128), new Vector2(336, 256));
+
+            gameE.AddSpriteToRender(selectedCharacter);
+            selectedCharacterAnim = new SpriteAnimation(WindowE.instance, selectedCharacter, new Rectangle(0, 0, 512, 128), 4, 1f, 1.5f, true);
+            selectedCharacterAnim.Play();
         }
 
         public void ConfirmCharacterSelection() {

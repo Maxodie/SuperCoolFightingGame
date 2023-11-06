@@ -4,7 +4,7 @@ using System.Windows.Media;
 namespace GameEn
 {
     public class AudioListener {
-        MediaPlayer mediaPlayer;
+        public MediaPlayer mediaPlayer;
 
         bool isLooping = false;
         public AudioListener(bool isLooping, string musicDefaultLocation = "", bool playAtStart = false) {
@@ -34,8 +34,10 @@ namespace GameEn
         /// <param name="sender"></param>
         /// <param name="e"></param>
         void OnMediaEnd(object sender, EventArgs e) {
-            if(isLooping)
-                mediaPlayer.Play();
+            if (isLooping)
+                Play();
+            else
+                Stop();
         }
 
         public void Stop() {

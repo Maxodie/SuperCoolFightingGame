@@ -23,16 +23,19 @@ namespace SuperCoolFightingGame
 
         Sprite[] hearts;
         Sprite[] attacks;
+        Sprite characterBorder;
 
         int currentHeartNb;
         int maxHearts;
         int currentAttackNb;
-        int baseAttaackPoint;
+        int baseAttackPoint;
 
         bool isPlayer;
         Character character;
+        Animator borderAnim;
+        Text nameText;
 
-        public PlayerHud(Vector2 heartsIconPos, int maxHearts, int heartNb, Vector2 attacksIconPos, int attackNb, int baseAttaackPoint, ImageLoader imageLoader, GameE gameE, bool leftToRight, bool isPlayer, Character character) {
+        public PlayerHud(Vector2 heartsIconPos, int maxHearts, int heartNb, Vector2 attacksIconPos, int attackNb, int baseAttackPoint, ImageLoader imageLoader, GameE gameE, bool leftToRight, bool isPlayer, Character character) {
             this.attackNb = attackNb;
             this.heartNb = heartNb;
             this.maxHearts = maxHearts;
@@ -40,7 +43,7 @@ namespace SuperCoolFightingGame
             this.gameE = gameE;
             this.heartsPos = heartsIconPos;
             this.attacksPos = attacksIconPos;
-            this.baseAttaackPoint = baseAttaackPoint;
+            this.baseAttackPoint = baseAttackPoint;
             this.isPlayer = isPlayer;
             this.character = character;
 
@@ -55,14 +58,34 @@ namespace SuperCoolFightingGame
             Sprite characterIcon = new Sprite(imageLoader.GetImage(character.characterIcon), new Rectangle(0, 0, 120, 120), new Vector2(72, 464));// 72;464 (120x120)
             gameE.AddSpriteToRender(characterIcon);
 
-            Sprite characterBorder = new Sprite(imageLoader.GetImage("characterBorder"), new Rectangle(0, 0, 288, 168), new Vector2(48, 440));
+            characterBorder = new Sprite(imageLoader.GetImage("characterBorder"), new Rectangle(0, 0, 288, 168), new Vector2(48, 440));
             gameE.AddSpriteToRender(characterBorder);
+
+            borderAnim = new Animator(WindowE.instance, characterBorder);
+            borderAnim.AddAnimation(imageLoader.GetImage("characterBorderOpen"), new Rectangle(0, 0, 288, 168), new Rectangle(0, 0, 3456, 168), 12, 1f, 1f, "Open");
+            borderAnim.AddOnEndAnimation(delegate(object sender, EventArgs e) { InitText(); }, "Open");
+
+            borderAnim.AddAnimation(imageLoader.GetImage("characterBorderClose"), new Rectangle(0, 0, 288, 168), new Rectangle(0, 0, 3456, 168), 12, 1f, 1f, "Close");
+            borderAnim.AddAnimationEvent(DestroyText, "Close", 1);
+            borderAnim.PlayAnimation("Open");
 
             Sprite characterTypeIcon = new Sprite(imageLoader.GetImage(character.characterTypeIconPath), new Rectangle(0, 0, 48, 48), new Vector2(232, 464));
             gameE.AddSpriteToRender(characterTypeIcon);
+        }
 
-            Text nameText = new Text(Color.Black, new Vector2(220, 550), character.Name, gameE.fonts["Pixel16"]);
+        void InitText() {
+            nameText = new Text(Color.Black, new Vector2(220, 550), character.Name, gameE.fonts["Pixel16"]);
             gameE.AddTextToRender(nameText);
+        }
+
+        public void CloseCharacterBorder() {
+            if(isPlayer)
+                borderAnim.PlayAnimation("Close");
+        }
+
+        void DestroyText() {
+            gameE.RemoveTextFromRender(nameText);
+            nameText.text = "";
         }
 
         void InitHearts(bool leftToRight) {
@@ -86,7 +109,7 @@ namespace SuperCoolFightingGame
             currentAttackNb = attackNb-1;
             
             for (int i = 0; i < attackNb; i++) {
-                bool condition = leftToRight ? i >= baseAttaackPoint || baseAttaackPoint == attackNb : i < baseAttaackPoint;
+                bool condition = leftToRight ? i >= baseAttackPoint || baseAttackPoint == attackNb : i < baseAttackPoint;
 
                 if (condition)
                     attacks[i] = new Sprite(imageLoader.GetImage("filledAttackPoint"), heartRect, new Vector2(attackDistance * i, 0) + attacksPos);
@@ -98,6 +121,10 @@ namespace SuperCoolFightingGame
 
             if (leftToRight)
                 Array.Reverse(attacks);
+        }
+
+        public void Update(float dt) {
+            borderAnim?.Update(dt);
         }
 
         public void LoseHp() {

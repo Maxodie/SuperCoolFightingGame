@@ -13,8 +13,7 @@ namespace SuperCoolFightingGame
         //Audio
         AudioListener backMusic;
 
-        public MainMenuState(GameStateData gameStateData): base(gameStateData) {
-        }
+        public MainMenuState(GameStateData gameStateData): base(gameStateData) { }
 
         public override void InitGUI() {
             window.BackgroundImage = imageLoader.GetImage("background0");
@@ -31,8 +30,6 @@ namespace SuperCoolFightingGame
             border = new Sprite(imageLoader.GetImage("border"), new Rectangle(0, 0, 800, 640), new Vector2(0, 0));
             gameE.AddSpriteToRender(border);
 
-            gameStateData.savedSprite["border"] = border;
-
             titleTextSprite = new Sprite(imageLoader.GetImage("title"), new Rectangle(0, 0, 592, 152), new Vector2(104, 56));
             superCoolFightingGame.AddSpriteToRender(titleTextSprite);
         }
@@ -41,8 +38,11 @@ namespace SuperCoolFightingGame
         /// Call on the creation of the state or on the update of all states
         /// </summary>
         public override void Start() {
-
-            backMusic = new AudioListener(true, "Media/sounds/mainMenu/supermax.mp3", true);
+            if (!gameStateData.savedAudio.ContainsKey("click"))
+            {
+                gameStateData.savedAudio["click"] = new AudioListener(false, "Media/sounds/SFX/Click.wav", false);
+            }
+            backMusic = new AudioListener(true, "Media/sounds/game/An.wav", true);
             mainMenuManager = new MainMenuManager(gameStateData, backMusic);
             base.Start();
         }
@@ -62,6 +62,7 @@ namespace SuperCoolFightingGame
         /// </summary>
         public override void OnStopRender() {
             base.OnStopRender();
+            mainMenuManager = null;
         }
 
         /// <summary>

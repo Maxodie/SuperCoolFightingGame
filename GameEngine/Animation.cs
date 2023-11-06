@@ -33,7 +33,7 @@ namespace GameEn
             this.window = window;
             this.sprite = sprite;
             startRect = fullRectSize;
-            startRect.X = sprite.Rect.X;
+            startRect.X = sprite.flipX ? fullRectSize.Width: sprite.Rect.X;
             startRect.Width = sprite.Rect.Width;
             startRect.Height = sprite.Rect.Height;
 
@@ -54,7 +54,6 @@ namespace GameEn
         }
 
         public void Play() {
-            sprite.ChangeImage(sprite.rImage.image, currentRect);
             isPaused = false;
         }
 
@@ -80,7 +79,7 @@ namespace GameEn
         
         void UpdateRect() {
             //change the rect with the flip state
-            if (sprite.flipX) 
+            if (sprite.flipX)
                 currentRect.X -= rectDifference;
             else
                 currentRect.X += rectDifference;
@@ -103,7 +102,6 @@ namespace GameEn
             if (!sprite.flipX) {
                 if (currentRect.X >= endRect.X)
                     EndAnimation();
-                
             }
             else {
                 if (currentRect.X <= 0)
@@ -138,7 +136,7 @@ namespace GameEn
             currentSpriteFrame = 0;
             currentRect = startRect;
 
-            if(forceStop) {
+            if (forceStop) {
                 isPaused = true;
                 return;
             }

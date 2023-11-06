@@ -1,6 +1,4 @@
-using GameEn;
 using System;
-using System.Drawing;
 
 namespace SuperCoolFightingGame
 { 
@@ -13,7 +11,7 @@ namespace SuperCoolFightingGame
         public string characterSpecialBtnPressedImgPath;
         public string characterSpecialSelfImgPath;
         public string characterSpecialSelfEffectImgPath;
-        public string characterSpecialProjectilImgPath;
+        public string characterSpecialProjectileImgPath;
         public string characterSpecialEnemyImgPath;
         public string characterIdleImgPath;
         public string characterDeathImgPath;
@@ -41,7 +39,7 @@ namespace SuperCoolFightingGame
             string characterSpecialBtnPressedImgPath,
             string characterSpecialSelfImgPath,
             string characterSpecialSelfEffectImgPath,
-            string characterSpecialProjectilImgPath,
+            string characterSpecialProjectileImgPath,
             string characterSpecialEnemyImgPath,
             string characterIdleImgPath,
             string characterDeathImgPath,
@@ -65,7 +63,7 @@ namespace SuperCoolFightingGame
             this.characterSpecialBtnPressedImgPath = characterSpecialBtnPressedImgPath;
             this.characterSpecialSelfImgPath = characterSpecialSelfImgPath;
             this.characterSpecialSelfEffectImgPath = characterSpecialSelfEffectImgPath;
-            this.characterSpecialProjectilImgPath = characterSpecialProjectilImgPath;
+            this.characterSpecialProjectileImgPath = characterSpecialProjectileImgPath;
             this.characterSpecialEnemyImgPath = characterSpecialEnemyImgPath;
             this.characterIdleImgPath = characterIdleImgPath;
             this.characterDeathImgPath = characterDeathImgPath;

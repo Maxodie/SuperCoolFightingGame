@@ -164,12 +164,21 @@ namespace GameEn
         /// Reset the render of all things
         /// </summary>
         public void ResetRender() {
-            Invalidate();
-            sprites.Clear();
+            while(sprites.Count > 0) {
+                sprites[0].rImage.image.Dispose();
+                sprites.RemoveAt(0);
+            }
+
             texts.Clear();
+
+            while (buttons.Count > 0) {
+                buttons[0].btnSprite.rImage.image.Dispose();
+                buttons.RemoveAt(0);
+            }
+
             Controls.Clear();
 
-            buttons.Clear();
+            Invalidate();
         }
 
         protected override void OnLoad(EventArgs e) {
@@ -181,8 +190,6 @@ namespace GameEn
         }
 
         private void GameThreadProc() {
-
-
             IAsyncResult tick = null;
             while (!_evExit.WaitOne(15)) {
                 if (tick != null) {
