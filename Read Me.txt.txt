@@ -1,0 +1,64 @@
+===== GAME ACCESS =====
+
+To access and launch the game, please go to SuperCoolFightingGame > bin > Release > SuperCoolFightingGame.exe
+
+===== GAME RULES =====
+
+Super Cool Fighting Game is, well, a fighting game. You can select a Character among the many available and face off against the computer,
+which will randomly select its Character. Each turn, you are granted the choice to Attack, Defend or use your Special ability. 
+After you've made your decision, the computer will make its, and the actions will then be executed. Be careful to wisely choose your
+actions, as they have a specific priority order in which they are executed. With that said, once a Character's HP reaches 0, they are 
+considered dead, and the last player to die wins the round! You're free to play as many rounds as you wish and experiment with the range
+of Characters available, as the game automatically restarts once a round ends.
+
+===== CHARACTERS & ABILITIES =====
+
+Characters all have a class, which defines their purpose, design or main playstyle, Health Points (HP) and Attack Points (AP) stats. They
+also each have their own Special ability which they can use in combat. Aside from using their Special ability, all Characters can Attack
+or Defend during their turn.
+
+Attack : Deal damage to the enemy equivalent to your AP.
+Defend : Reduce incoming damage by 1 for the turn.
+
+-----
+
+The Assassin, Guni : Guni is a blindfolded veteran assassin who relies on his keen senses to dominate the battlefield.
+3 HP - 2 AP
+Seethrough : Identify your enemy's weakness and wait for their action, after which you will Attack and pierce any defenses.
+
+The Fighter, Vlad : Vlad is a classy-snazzy young demon full of passion and vitality. His explosive willpower blows the battlefield away.
+3 HP - 2 AP
+Berserk : Accumulate the damage you receive during the turn before sending it right back to the enemy.
+
+The Enchantress, Luna : Luna is a very proficient and knowledgeable mage who dedicates her life to grasping the mysteries of the universe.
+4 HP - 1 AP
+Heal : Calling upon the higher forces, obtain the stars' aid and regenerate 2 HP.
+
+The Vanguard, Nan : Nan is a firm and cold-blooded martial sportswoman. She will not hesitate to forfeit her life to reach her goals.
+5 HP - 1 AP
+Sacrifice : Drawing power right from the source of your blood, you lose 1 HP but gain 1 AP for the turn and Attack right after.
+
+===== DIFFICULTIES =====
+
+The game is comprised of three different difficulties, which define the computer's playstyle. The player can choose which difficulty they
+want to play in, and the computer will act accordingly.
+
+Easy : The computer plays randomly, choosing a random action between Attack, Defend and Special ability each turn.
+Medium : The computer will make the best action it can according to the Character they're playing as well as their current HP.
+Hard : Same as the Medium difficulty, except the computer will also take into account your HP and the Character you're playing.
+
+===== CONTRIBUTORS =====
+
+Maximilien BIGNON : Engine Developer
+Erwan LE CARO : Gameplay and AI Developer
+Nicolas PAYET : Game and Assets Designer
+
+-----
+
+Honorable Mentions & Indirect Contributors :
+Gunilem, Vladimir, Andoni
+
+-----
+
+We extend our most sincere gratitude to all of our game's players, and wish you a fantastic time playing our game and having fun with
+friends!
