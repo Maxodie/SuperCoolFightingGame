@@ -1,14 +1,14 @@
-# • GAME ACCESS •
+# GAME ACCESS
 
 To access and launch the game, please go to SuperCoolFightingGame > bin > Release > SuperCoolFightingGame.exe
 
-# • GAME RULES •
+# GAME RULES
 
 Super Cool Fighting Game is, well, a fighting game. You can select a Character among the many available and face off against the computer, which will randomly select its Character. Each turn, you are granted the choice to Attack, Defend or use your Special Ability. After you've made your decision, the computer will make its own, and the actions will then be executed. Be careful to wisely choose your actions, as they have a specific priority order in which they are executed. With that said, once a Character's HP reaches 0, they are considered dead, and the last player to die wins the round! You're free to play as many rounds as you wish and experiment with the range of Characters available, as the game automatically restarts once a round ends.
 
-# • CHARACTERS & ABILITIES •
+# CHARACTERS & ABILITIES
 
-Characters all have a class, which defines their purpose, design or main playstyle, Health Points (HP) and Attack Points (AP). They also each have their own Special Ability which they can use in combat. Aside from using their Special Ability, all Characters can Attack or Defend during their turn.
+Characters all have a class, which defines their purpose, design or main playstyle, Health Points *(HP)* and Attack Points *(AP)*. They also each have their own Special Ability which they can use in combat. Aside from using their Special Ability, all Characters can Attack or Defend during their turn.
 
 **Attack** : Deal damage to the enemy equivalent to your AP.  
 **Defend** : Reduce incoming damage by 1 for the turn.  
@@ -47,7 +47,7 @@ Characters all have a class, which defines their purpose, design or main playsty
 3 HP - 2 AP  
 *Offering* : Become immune to damage for the turn, after which you either heal HP equivalent to damage received or lose 1 HP if none.
 
-# • DIFFICULTIES •
+# DIFFICULTIES
 
 The game is comprised of three different difficulties, which define the computer's playstyle. The player can choose which difficulty they want to play in, and the computer will act accordingly.
 
@@ -55,16 +55,16 @@ The game is comprised of three different difficulties, which define the computer
 **Medium** : The computer will make the best action it can according to the Character they're playing as well as their current HP.  
 **Hard** : Same as the Medium difficulty, except the computer will also take into account your HP and the Character you're playing.  
 
-# • CONTRIBUTORS •
+# CONTRIBUTORS
 
-**Erwan LE CARO** : Gameplay & AI Developer  
-**Maximilien BIGNON** : Engine Developer  
-**Nicolas PAYET** : Game & Assets Designer  
+*Erwan LE CARO* : Gameplay & AI Developer  
+*Maximilien BIGNON* : Engine Developer  
+*Nicolas PAYET* : Game & Assets Designer  
 
 -----
 
 **Honorable Mentions & Indirect Contributors** :  
-Gunilem, Vladimir, Andoni
+*Gunilem, Vladimir, Andoni*
 
 -----
 
